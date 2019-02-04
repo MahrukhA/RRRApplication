@@ -2,6 +2,7 @@
 id: int (Primary)
 user: int (Foreign key)
 title: string
+location: int
 description: string
 daily_price: int 
 Picture1:blob
@@ -12,11 +13,10 @@ picture5:blob
 is_available: bool              	// default = True
 is_hidden: bool		// default = False
 is_approved : bool		// default = False
-// for ViewAlllistings.html, is_available (true), is_hidden(false), is_approved(true)
+// for viewlistings.html, is_available (true), is_hidden(false), is_approved(true)
 
 ### Users
 id: int (Primary)
 username: string
-location: string
 email: string
 password: string
