@@ -1,6 +1,55 @@
 {% load static %}
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#howitworks">How It Works</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <div class="dropdown show">
+                        <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Hello, {{user.first_name }}! </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'listings' %}">My Listings</a>
+                            <a class="dropdown-item" href="{% url 'dashboard' %}">My Profile</a>
+                            <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">
+                                Logout</a>
+                            <form action="{% url 'logout' %}" method="POST" id="logout">
+                                {% csrf_token %}
+                                <input type="hidden">
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="btn btn-info" href="{% url 'listings' %}" role="button">Create a listing</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container">
         <a class="navbar-brand" href="{% url 'index' %}">
             <img src="{% static 'img/logo.png' %}" class="logo" alt="">
@@ -28,7 +77,6 @@
                 </li>
 
                 <li class="nav-item mr-3">
-                    <!-- Need to submit a POST form to the view-method be able to logout -->
                     <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"> Logout</a>
                     <form action="{% url 'logout' %}" method="POST" id="logout">
                         {% csrf_token %}
@@ -46,4 +94,4 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> -->
