@@ -2,8 +2,13 @@
 Our main project, RRR, connectsd to different 'apps' that each perform a functionality if our website
 
 
-### DJANGO STRUCTURE ###
-- our main project 
+### DJANGO ARCHITECTURE ###
+- MTV architecture
+- MODEL: Contains the essential fields of the dats you store
+- TEMPLATE: Describes how the data is presented
+- VIEW: Describes which data you see
+- see https://docs.djangoproject.com/en/2.1/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names
+
 
 ### APPS ###
 ## Apps for our project ##
@@ -22,6 +27,10 @@ Our main project, RRR, connectsd to different 'apps' that each perform a functio
 
 ### TEMPLATES FOLDER ###
 - views will render .html files from a templates folder defined in settings.py 
+
+
+### DJANGO TEMPLATE LANGUAGE ###
+- see https://docs.djangoproject.com/en/2.1/ref/templates/language/
 
 
 ### STATIC FOLDER ###
@@ -56,7 +65,7 @@ Our main project, RRR, connectsd to different 'apps' that each perform a functio
 - login and register forms: method = "POST"
 - add {% csrf_token %} to prevent cross site request forgery, see https://docs.djangoproject.com/en/2.1/ref/csrf/
 
-### Form input validation ###
+## Form input validation ##
 - we will use django's built-in messaging for authenticated users
 - see https://docs.djangoproject.com/en/2.1/ref/contrib/messages/ 
 - created a '_alerts.html' partial for error messages, use with {% include 'partials/_alerts.html' %}
