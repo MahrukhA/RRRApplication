@@ -33,6 +33,9 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="btn btn-info" href="{% url 'create' %}" role="button">Create a listing</a>
+                </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'register' %}">Register</a>
@@ -40,10 +43,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login' %}">Log In</a>
                 </li>
-                {% endif %}
                 <li class="nav-item">
-                    <a class="btn btn-info" href="{% url 'listings' %}" role="button">Create a listing</a>
+                    <a class="btn btn-info" href="{% url 'login'%}" role="button">Create a listing</a><!--Must be logged in to create a listing-->
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>
