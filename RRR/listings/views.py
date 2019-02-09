@@ -12,6 +12,23 @@ def listing(request):
 
 def create(request):
 	if request.method == 'POST':
+
+		#5 and 15 ARE PLACEHOLDER VALUES for right now
+		#title is too short
+		if (len(request.POST['title']) < 5):
+			messages.error(request, 'Title must be at least 5 characters long!')
+			return redirect('create')
+
+		#description is too short
+		if (len(request.POST['description']) < 15):
+			messages.error(request, 'Description must be at least 15 characters long!')
+			return redirect('create')
+
+		#price is empty
+		if (len(str(request.POST['daily_price'])) < 1):
+			messages.error(request, 'Price can\'t be blank!')
+			return redirect('create')
+
 		#uploaded file must be a jpg
 		#goes through all the photos (photo_1 to photo_5) and checks if they exist
 		#if the photo exists (ie a user uploaded that image), it must end with .jpg, .JPG, .png, .PNG
