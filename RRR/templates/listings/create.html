@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %} | Create a Listing{% endblock %}
+
+{% block content %}
+<section id="create" class="bg-light py-5">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 mx-auto">
+				<div class="card">
+					<div class="card-header bg-primary text-white">
+						<h4> Create a listing </h4>
+					</div>
+				<div class="card-body">
+					{% include 'partials/_alerts.html' %}
+					<form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="title">Title</label>
+							<input type="text" name="title" class="form-control" required>
+						</div>
+
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea name="description" class="form-control" rows="4" cols="15" required></textarea>
+						</div>
+
+						<div class="form-group">
+							<label for="daily_price">Daily Price</label>
+							<input type="number" name="daily_price" class="form-control" required>
+						</div>
+
+						<div class="form-group">
+							<label for="location">Location</label><br /> <!--radio buttons doesn't create a new line automatically--->
+							<input type="radio" name="location" value="0">North Regina<br />
+							<input type="radio" name="location" value="1">South Regina<br />
+							<input type="radio" name="location" value="2">East Regina<br />
+							<input type="radio" name="location" value="3">West Regina
+						</div>
+
+						<div class="form-group">
+							<label for="photo_1">Upload 1 - 5 images</label>
+							<input id="photo_1" type="file" name="photo_1" class="form-control" required>
+						</div>
+
+						<div class="form-group">
+							<input type="file" name="photo_2" class="form-control">
+						</div>
+
+						<div class="form-group">
+							<input type="file" name="photo_3" class="form-control">
+						</div>
+
+						<div class="form-group">
+							<input type="file" name="photo_4" class="form-control">
+						</div>
+
+						<div class="form-group">
+							<input type="file" name="photo_5" class="form-control">
+						</div>
+
+						<input type="submit" value="Submit" class="btn btn-secondary btn-block"/>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+</section>
+
+
+
+
+
+{% endblock %}
