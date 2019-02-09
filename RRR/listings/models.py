@@ -1,7 +1,8 @@
-from django.db import models
+from django.db import models    
 from django.conf import settings
 
 
+#create your models here
 class Listing(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -18,5 +19,9 @@ class Listing(models.Model):
     is_hidden = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
 
+    class Meta:
+        db_table = 'listings_listing' #table name
+
     def __str__(self):
         return self.title
+
