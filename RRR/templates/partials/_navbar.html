@@ -12,7 +12,7 @@
                     <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#howitworks">How It Works</a>
+                    <a class="nav-link" href="{% url 'listings' %}">Listings</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
@@ -44,7 +44,8 @@
                     <a class="nav-link" href="{% url 'login' %}">Log In</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-info" href="{% url 'login'%}" role="button">Create a listing</a><!--Must be logged in to create a listing-->
+                    <a class="btn btn-info" href="{% url 'login'%}" role="button">Create a listing</a>
+                    <!--Must be logged in to create a listing-->
                 </li>
                 {% endif %}
             </ul>
