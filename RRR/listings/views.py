@@ -54,5 +54,11 @@ def create(request):
 			return redirect('create') 
 
 	else:
-		return render(request, 'listings/create.html') #User clicked on the Create a Listing button
+		#can only view the create a listing page if they are logged in
+		if not request.user.is_authenticated:
+			#create a listing redirects to login when not logged in, so this redirect will happen when users type in the url for the create page instead of clicking on the button
+			messages.error(request, 'Must be logged in to create a listing!')
+			return redirect('login')
+		else:
+			return render(request, 'listings/create.html') #logged in user clicked on the Create a Listing button
 
