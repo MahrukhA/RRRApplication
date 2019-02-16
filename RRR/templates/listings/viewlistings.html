@@ -4,6 +4,7 @@
 {% block title %} | Listings Page{% endblock %}
 
 {% block content %}
+
 <div class="post-wrapper pt-100">
     <section class="post-area">
         <div class="container">
@@ -67,116 +68,81 @@
                 <div class="col-lg-9">
                     <hgroup class="pb-20">
                         <h4 class="lead">
-                            <strong class="text-secondary"> 3 </strong> results were found for the search for <strong
+                            <strong class="text-secondary"> {{ count }} </strong> results were found for the search for <strong
                                 class="text-secondary">Stuff</strong>
                         </h4>
                         <br>
                     </hgroup>
-                    <!-- Listing 1 -->
-                    <div class="single-list flex-row d-flex">
-                        <!-- Image -->
-                        <div class="thumb">
-                            <div class="price">
-                                <span>$10</span><br>/ Day
+                    <!--Displays listings from database-->
+                    {% for listing in approved_listings %}
+                        <div class="single-list flex-row d-flex">
+                            <div class="thumb">
+                                <div class="price">
+                                    <span>${{ listing.daily_price }}</span><br />/Day
+                                </div>
+                                <img src="{{ listing.photo_1.url }}" class="listing-img" alt="bike">
                             </div>
-                            <img src="{% static 'img/mbike.jpg' %}" class="listing-img" alt="bike">
-                        </div>
-                        <!-- Details -->
-                        <div class="detail">
-                            <a href="#">
-                                <h4 class="pb-20">
-                                    This is the listing title
-                                </h4>
-                            </a>
-                            <p>This is listing's desciption, for example this is a super special awesome Bike!</p>
-                            <p class="footer pt-20">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                                <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
-                                <span>Location</span>
-                                <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-                                <span>Available Now!</span>
-                            </p>
-                        </div>
-                    </div>
 
-                    <!-- Listing 2 -->
-                    <div class="single-list flex-row d-flex">
-                        <!-- Image -->
-                        <div class="thumb">
-                            <div class="price">
-                                <span>$15</span><br>/ Day
+                            <div class="detail">
+                                <a href="./{{ listing.id }}">
+                                    <h4 class="pb-20">
+                                        {{ listing.title }}
+                                    </h4>
+                                </a>
+                                <p> {{ listing.description }} </p>
+                                <p class="footer pt-20">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <span>{{ listing.user }}</span>
+                                    <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
+                                    {% if listing.location == 0 %}
+                                        <span>North Regina</span>
+                                    {% elif listing.location == 1 %}
+                                        <span>South Regina</span>
+                                    {% elif listing.location == 2 %}
+                                        <span>East Regina</span>
+                                    {% else %}
+                                        <span>West Regina</span>
+                                    {% endif %}
+                                    <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
+                                    {% if listing.is_approved %}
+                                            <span>Available now!</span>
+                                    {% else %}
+                                            <span>Not available</span>
+                                    {% endif %}    
+                                </p>
                             </div>
-                            <img src="{% static 'img/snowboard.jpg' %}" class="listing-img" alt="snowboard">
                         </div>
-                        <!-- Details -->
-                        <div class="detail">
-                            <a href="#">
-                                <h4 class="pb-20">
-                                    This is the listing title
-                                </h4>
-                            </a>
-                            <p>This is listing's desciption, for example this is a super special awesome snowboard! Let
-                                me just add
-                                sojme more text here cause I'm too lazy to go to lorem ipsum for dummy text </p>
-                            <p class="footer pt-20">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                                <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
-                                <span>Location</span>
-                                <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-                                <span>Available Now!</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Listing 3 -->
-                    <div class="single-list flex-row d-flex">
-                        <!-- Image -->
-                        <div class="thumb">
-                            <div class="price">
-                                <span>$20</span><br>/ Day
-                            </div>
-                            <img src="{% static 'img/kayak.jpeg' %}" class="listing-img" alt="kayak">
-                        </div>
-                        <!-- Details -->
-                        <div class="detail">
-                            <a href="#">
-                                <h4 class="pb-20">
-                                    This is the listing title
-                                </h4>
-                            </a>
-                            <p>This is listing's desciption, for example this is a super special awesome kayak</p>
-                            <p class="footer pt-20">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                                <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
-                                <span>Location</span>
-                                <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-                                <span>Available Now!</span>
-                            </p>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                     <!-- Pagination -->
                     <div class="justify-content-center d-flex">
                         <div class="row">
                             <ul class="pagination">
+                                <!--If not on first (or only) page-->
+                                {% if approved_listings.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo; First </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ approved_listings.previous_page_number }}"> &lt; Previous </a>
+                                    </li>
+                                {% endif %}
+
+                                <!--Displays what page you are on and the total number of pages-->
                                 <li class="page-item disabled">
-                                    <a class="page-link" href="#">&laquo;</a>
+                                    <p class="page-link">
+                                        Page {{ approved_listings.number }} of {{ approved_listings.paginator.num_pages }}
+                                    </p>
                                 </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">&raquo;</a>
-                                </li>
+
+                                <!--If not on last (or only) page-->
+                                {% if approved_listings.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ approved_listings.next_page_number }}"> Next &gt; </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ approved_listings.paginator.num_pages }}">Last &raquo;</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
 

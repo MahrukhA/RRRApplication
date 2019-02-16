@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ListingForm
-
+from .models import Listing
+from django.core.paginator import Paginator
 
 def index(request):
-    return render(request, 'listings/viewlistings.html')
+	approved_listings_query = Listing.objects.filter(is_approved = True).order_by('id') #gets all approved listings, and sorts by id in ascending order
+	paginator = Paginator(approved_listings_query, 3) #3 listings per page
+	page = request.GET.get('page') #gets page number from url
+	approved_listings = paginator.get_page(page) #gets the approved listings from some page number
+	return render(request, 'listings/viewlistings.html', {'approved_listings': approved_listings, 'count': approved_listings_query.count})
 
 
 def listing(request):
