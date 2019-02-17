@@ -448,3 +448,69 @@ margin-left: 4px;
   color: #FEDC3D;
   font-size: 14px;
 }
+
+
+.form-wrap-inn{
+  padding: 20px;
+}
+
+.form-content {
+  padding: 20px 20px 30px 20px;
+
+}
+
+.form-wrap {
+  position: absolute;
+  margin: 0 auto;
+  max-width: 650px;
+  width: 100%;
+}
+.form-wrap-inn{
+  position: relative;
+  background-color: #fff;
+  background-repeat: repeat;
+  transition: all 500ms ease;
+}
+
+.frame {
+  position: relative;
+  border:3px solid    #5bc0de;
+  transition: border-color 300ms ease;
+}
+
+.header{
+  text-align:center;
+}
+
+.header h2{
+  color:  #5bc0de;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.form-group {
+  position: relative;
+}
+
+.login-form {
+  max-width: 412px;
+  margin: 30px auto;
+}
+
+
+.form-input {
+  position: relative;
+  padding: 12px 0px 5px 0;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  box-shadow: 0 1px 0 0  #5bc0de;
+}
+
+.button p{
+font-size:9px;
+padding-top:1em;
+}
+.button {
+padding-top:2em;
+}
