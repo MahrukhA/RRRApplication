@@ -3,6 +3,92 @@
 {% block title %} | User Dashboard{% endblock %}
 
 {% block content %}
-<h1>Page for updating user profile</h1>
+
+<!--Only the logged in user's listings are displayed here-->
+<h1 align="center"><u>Your listings</u></h1>
+<div class="post-wrapper pt-100">
+    <section class="post-area">
+        <div class="container">
+            <div class="row justify-content-center d-flex">
+           		<div class="col-lg-9">
+					{% for listing in user_listings %}
+					<div class="single-list flex-row d-flex">
+				        <div class="thumb">
+				            <div class="price">
+				                <span>${{ listing.daily_price }}</span><br />/Day
+				            </div>
+				            <img src="{{ listing.photo_1.url }}" class="listing-img" alt="bike">
+				        </div>
+
+				        <div class="detail">
+				            <a href="./{{ listing.id }}">
+				                <h4 class="pb-20">
+				                    {{ listing.title }}
+				                </h4>
+				            </a>
+				            <p> {{ listing.description }} </p>
+				            <p>
+				            	<!--WHY DO THESE BUTTONS ONLY CHANGE COLOR ON HOVER???????????????????????????????-->
+				                <a class="btn btn-danger" href="#" role="button">Delete</a>
+				                <a class="btn btn-warning"href="#" role="button">Edit</a>
+				                <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
+				                {% if listing.location == 0 %}
+				                    <span>North Regina</span>
+				                {% elif listing.location == 1 %}
+				                    <span>South Regina</span>
+				                {% elif listing.location == 2 %}
+				                    <span>East Regina</span>
+				                {% else %}
+				                    <span>West Regina</span>
+				                {% endif %}
+				                <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
+				                {% if listing.is_approved %}
+				                        <span>Available now!</span>
+				                {% else %}
+				                        <span>Not available</span>
+				                {% endif %}    
+				            </p>
+				        </div>
+				    </div>
+					{% endfor %}
+					<!--Pagination-->
+					<div class="justify-content-center d-flex">
+                        <div class="row">
+                            <ul class="pagination">
+                                <!--If not on first (or only) page-->
+                                {% if user_listings.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo; First </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_listings.previous_page_number }}"> &lt; Previous </a>
+                                    </li>
+                                {% endif %}
+
+                                <!--Displays what page you are on and the total number of pages-->
+                                <li class="page-item disabled">
+                                    <p class="page-link">
+                                        Page {{ user_listings.number }} of {{ user_listings.paginator.num_pages }}
+                                    </p>
+                                </li>
+
+                                <!--If not on last (or only) page-->
+                                {% if user_listings.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_listings.next_page_number }}"> Next &gt; </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_listings.paginator.num_pages }}">Last &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
 {% include 'partials/_alerts.html' %}
 {% endblock %}

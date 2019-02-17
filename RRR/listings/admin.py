@@ -26,8 +26,7 @@ class UnapprovedListingAdmin(ListingAdmin):
 
 
 admin.site.register(Listing, ListingAdmin)
-if Listing.objects.filter(is_approved = False).count() > 0: 
-	admin.site.register(UnapprovedListing, UnapprovedListingAdmin)
+admin.site.register(UnapprovedListing, UnapprovedListingAdmin)
 
 '''
 if Listing.objects.filter(is_approved = False).count() > 0: 

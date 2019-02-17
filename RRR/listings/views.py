@@ -1,10 +1,50 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ListingForm
-
+from .models import Listing
+from django.core.paginator import Paginator
 
 def index(request):
-    return render(request, 'listings/viewlistings.html')
+	query = request.GET.get('q')#search query (= None if q POST var isnt set)
+	if query is not None:
+		approved_listings_query = Listing.objects.filter(is_approved = True, title__icontains=query).order_by('id') #gets all approved listings, and sorts by id in ascending order
+	else:
+		approved_listings_query = Listing.objects.filter(is_approved = True).order_by('id')#query wasn't entered - display ALL approved listings
+	
+	available = request.GET.get('available')
+	if available is not None:
+		approved_listings_query = approved_listings_query.filter(is_available = True)
+
+	daily_price = request.GET.get('daily_price')
+	if daily_price is not None:
+		daily_price = int(daily_price)
+		if daily_price == 0:
+			approved_listings_query = approved_listings_query.filter(daily_price__range=(0, 14))
+		elif daily_price == 1:
+			approved_listings_query = approved_listings_query.filter(daily_price__range=(15, 30))
+		elif daily_price == 2:
+			approved_listings_query = approved_listings_query.filter(daily_price__range=(31, 50))
+		elif daily_price == 3:
+			approved_listings_query = approved_listings_query.filter(daily_price__range=(51, 75))
+		else:
+			approved_listings_query = approved_listings_query.filter(daily_price__range=(76, 1000))
+
+	location = request.GET.get('location')
+	if location is not None:
+		location = int(location)
+		if location == 0:
+			approved_listings_query = approved_listings_query.filter(location = 0)
+		elif location == 1:
+			approved_listings_query = approved_listings_query.filter(location = 1)
+		elif location == 2:
+			approved_listings_query = approved_listings_query.filter(location = 2)
+		else:
+			approved_listings_query = approved_listings_query.filter(location = 3)
+
+	paginator = Paginator(approved_listings_query, 3) #3 listings per page
+	page = request.GET.get('page') #gets page number from url
+	approved_listings = paginator.get_page(page) #gets the approved listings from some page number
+	return render(request, 'listings/viewlistings.html', {'approved_listings': approved_listings, 'count': approved_listings_query.count, 'query': query})
 
 
 def listing(request, listing_id):
