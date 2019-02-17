@@ -16,3 +16,8 @@ jQuery(document).ready(function ($) {
         }
     })
 });
+
+// Message Box Fadeout
+setTimeout(function () {
+    $('#message').fadeOut('slow');
+});
