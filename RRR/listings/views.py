@@ -7,7 +7,7 @@ def index(request):
     return render(request, 'listings/viewlistings.html')
 
 
-def listing(request):
+def listing(request, listing_id):
     return render(request, 'listings/listing.html')
 
 

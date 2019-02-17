@@ -1,7 +1,73 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} | {{ listing.title }}{% endblock %}
 
 {% block content %}
-<h1>This is listing.html</h1>
+<div class = "container-fluid">
+	<div class="row">
+		<div class="col-8"> col sm 6 
+		
+			<div class="single-list flex-row d-flex">
+				<!-- Image -->
+				<div class="thumb">
+					<div class="price">
+						<span>$10</span><br>/ Day
+					</div>
+					<img src="{% static 'img/mbike.jpg' %}" class="listing-img" alt="bike" >
+				</div>
+				<!-- Details -->
+				<div class="detail">
+					<a href="{% url 'listing' 1%}">
+						<h4 class="pb-20">
+							This is the listing title
+						</h4>
+					</a>
+					<p>This is listing's desciption, for example this is a super special awesome Bike!</p>
+					<p class="footer pt-20">
+						<i class="fa fa-user" aria-hidden="true"></i>
+						<span>User</span>
+						<i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
+						<span>Location</span>
+						<i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
+						<span>Available Now!</span>
+					</p>
+				</div>
+			</div>
+
+		</div>
+
+
+
+		<div class="col-4">.col-sm-8 
+			<div class="form-wrap">
+				<div class="form-wrap-inn">
+					<div class="frame">
+						<div class="form-content">
+							<div class="header">
+								<h2>Want This Item?</h2>
+								<p>Send a message to the owner to let them know you are interested! </p>
+							</div>
+
+							<div class="login-form">
+								<form action="" class="form">
+									<div class="form-group">
+										<input id="first" class="form-input" type="text" placeholder="What is your name?">
+									</div>
+									<div class="form-group">
+										<input id="last" class="form-input" type="text" placeholder="What is your message?">
+									</div>
+								</form>
+								<div class="text-center button">
+									<input type="submit" value="Send Request" class="btn btn-info btn-block rounded-0 py-2">
+									<p> This will send an email to the owner who will be in contact with you shortly.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
