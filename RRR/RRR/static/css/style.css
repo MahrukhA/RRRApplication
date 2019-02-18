@@ -153,9 +153,6 @@ a, a:focus, a:hover {
 
 .btn{
   font-size: 1em;
-  color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
 }
 
 
@@ -493,6 +490,19 @@ font-size:9px;
 
 .listpage{
   padding-bottom:120px;
-
 }
 
+.unavailable{
+  font-size:11px;
+}
+
+/*profile*/
+.profcontainer{
+  padding-top:30px;
+  padding-left:100px
+}
+
+/*dashboard*/
+.dashboardhead{
+  padding:5px;
+}

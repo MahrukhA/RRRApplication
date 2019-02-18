@@ -5,12 +5,12 @@
 {% block content %}
 
 <!--Only the logged in user's listings are displayed here-->
-<h1 align="center"><u>Your listings</u></h1>
-<div class="post-wrapper pt-100">
+<div class="post-wrapper pt-60">
     <section class="post-area">
         <div class="container">
-            <div class="row justify-content-center d-flex">
+            <div class="row justify-content-left d-flex">
            		<div class="col-lg-9">
+                        <h1 class="dashboardhead">My listings</h1>
 					{% for listing in user_listings %}
 					<div class="single-list flex-row d-flex">
 				        <div class="thumb">
@@ -28,9 +28,6 @@
 				            </a>
 				            <p> {{ listing.description }} </p>
 				            <p>
-				            	<!--WHY DO THESE BUTTONS ONLY CHANGE COLOR ON HOVER???????????????????????????????-->
-				                <a class="btn btn-danger" href="#" role="button">Delete</a>
-				                <a class="btn btn-warning"href="#" role="button">Edit</a>
 				                <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
 				                {% if listing.location == 0 %}
 				                    <span>North Regina</span>
@@ -46,7 +43,11 @@
 				                        <span>Available now!</span>
 				                {% else %}
 				                        <span>Not available</span>
-				                {% endif %}    
+                                {% endif %} 
+                                <p>
+                                <a class="btn btn-danger" href="#" role="button">Delete</a>
+                                <a class="btn btn-warning"href="#" role="button">Edit</a>  
+                                </p>
 				            </p>
 				        </div>
 				    </div>
