@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from listings.models import Listing
 from django.core.paginator import Paginator
 
+
 def register(request):
     if request.method == 'POST':
         # create variables for the form values
@@ -69,8 +70,13 @@ def logout(request):
 
 
 def dashboard(request):
-    user_listings_query = Listing.objects.filter(user_id = request.user).order_by('id')
+    user_listings_query = Listing.objects.filter(
+        user_id=request.user).order_by('id')
     paginator = Paginator(user_listings_query, 10)
     page = request.GET.get('page')
     user_listings = paginator.get_page(page)
     return render(request, 'accounts/dashboard.html', {'user_listings': user_listings})
+
+
+def profile(request):
+    return render(request, 'accounts/profile.html')
