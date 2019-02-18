@@ -17,11 +17,7 @@
                             <div class="imaginary_container">
                                 <div class="input-group stylish-input-group">
                                     <input type="text" class="form-control" name="q" placeholder="Keyword..."
-<<<<<<< HEAD
-                                           value='{% if query|length > 0  %}{{ query  }}{% endif %}'>
-=======
                                         value='{% if query|length > 0  %}{{ query  }}{% endif %}'>
->>>>>>> 68bab9ea7e3702ed5dc9231736d735432bfece2b
                                 </div>
                             </div>
                         </div>
@@ -99,36 +95,6 @@
                             <img src="{{ listing.photo_1.url }}" class="listing-img" alt="bike">
                         </div>
 
-<<<<<<< HEAD
-                            <div class="detail">
-                                <a href="./{{ listing.id }}">
-                                    <h4 class="pb-20">
-                                        {{ listing.title }}
-                                    </h4>
-                                </a>
-                                <p> {{ listing.description }} </p>
-                                <p class="footer pt-20">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span>{{ listing.user }}</span>
-                                    <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
-                                    {% if listing.location == 0 %}
-                                        <span>North Regina</span>
-                                    {% elif listing.location == 1 %}
-                                        <span>South Regina</span>
-                                    {% elif listing.location == 2 %}
-                                        <span>East Regina</span>
-                                    {% else %}
-                                        <span>West Regina</span>
-                                    {% endif %}
-                                    <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-                                    {% if listing.is_approved %}
-                                            <span>Available now!</span>
-                                    {% else %}
-                                            <span>Not available</span>
-                                    {% endif %}
-                                </p>
-                            </div>
-=======
                         <div class="detail">
                             <a href="./{{ listing.id }}">
                                 <h4 class="pb-20">
@@ -156,7 +122,6 @@
                                 <span>Not available</span>
                                 {% endif %}
                             </p>
->>>>>>> 68bab9ea7e3702ed5dc9231736d735432bfece2b
                         </div>
                     </div>
                     {% endfor %}
