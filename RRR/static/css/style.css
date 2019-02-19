@@ -6,14 +6,15 @@ html {
 }
 
 body {
-  color: #777;
+  color:#575554;
   font-family: "Poppins",sans-serif;
   font-size: 14px;
   font-weight: 300;
-  line-height: 1.625em;
+  line-height: 1.800em;
   position: relative;
   margin: 0;
   padding: 0;
+
 }
 
 div {
@@ -153,9 +154,6 @@ a, a:focus, a:hover {
 
 .btn{
   font-size: 1em;
-  color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
 }
 
 
@@ -447,4 +445,65 @@ margin-left: 4px;
   text-align: center;
   color: #FEDC3D;
   font-size: 14px;
+}
+
+/*FOR SPECIFICLISTING PAGE*/
+
+.form-content {
+  padding: 20px 20px 30px 20px;
+
+}
+.postlist {
+padding: 30px;
+}
+
+.header{
+  text-align:center;
+}
+
+.header h2{
+  color:  #5bc0de;
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.shadow-textarea textarea.form-control::placeholder {
+  font-weight: 50;
+  font-size:12px;
+}
+.shadow-textarea textarea.form-control {
+  padding-left: 0.8rem;
+}
+.button p{
+font-size:9px;
+}
+
+.smallthumbs{
+  padding-top: 1px;
+  width: 4.5rem;
+  height:70px;
+}
+
+.detaillisting{
+  padding-left:10px;
+  padding-top:0;
+}
+
+.listpage{
+  padding-bottom:120px;
+}
+
+.unavailable{
+  font-size:11px;
+}
+
+/*profile*/
+.profcontainer{
+  padding-top:30px;
+  padding-left:100px
+}
+
+/*dashboard*/
+.dashboardhead{
+  padding:5px;
 }

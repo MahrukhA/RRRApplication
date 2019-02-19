@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} | Edit Profile{% endblock %}
+
+{% block content %}
+<div class="profcontainer">
+        <div class="row">
+          <!-- edit form column -->
+          <div class="col-8">
+            <div class="alert alert-info alert-dismissable">
+              <a class="panel-close close" data-dismiss="alert">×</a> 
+              This is an <strong>.alert</strong>. Use this to show important messages to the user.
+            </div>
+            <div class="col-8">
+            <h3>Personal info</h3>
+             <p> First Name: <input class="form-control" value="Jane" type="text"> </p>
+             <p> Last Name: <input class="form-control" value="Jane" type="text"> </p>
+             <p> Username: <input class="form-control" value="Janeisgreat" type="text"> </p>
+             <p> Email: <input class="form-control" value="Janeisgreat@hotmail.com" type="text"> </p>
+             <p> Password: <input class="form-control" value="" type="text"> </p>
+             <p> Confirm Password: <input class="form-control" value="" type="text"> </p>
+            </div>
+            
+                <div class="col-8">
+                  <input class="btn btn-success" value="Save Changes" type="button">
+                  <span></span>
+                  <input class="btn btn-warning" value="Cancel" type="reset">
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

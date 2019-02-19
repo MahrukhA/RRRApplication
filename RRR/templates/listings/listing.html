@@ -1,7 +1,90 @@
 {% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 
-{% block title %} | {{ listing.title }}{% endblock %}
+{% block title %} | {{ listing.title }} {% endblock %}
 
 {% block content %}
-<h1>This is listing.html</h1>
+
+<div class="post-wrapper pt-100">
+	<!-- <section class="post-area"> -->
+	<div class="container listpage">
+		<div class="row justify-content-center d-flex">
+			<div class="col-8 postlist">
+				<div class="single-list flex-row d-flex">
+					<!-- Image -->
+					<div class="thumb">
+						<div class="price">
+							<span>$10</span><br>/ Day
+						</div>
+
+						<a href="{% static 'img/mbike.jpg' %}" data-lightbox="listimages">
+							<img src="{% static 'img/mbike.jpg' %}" class="listing-img" alt="bike"></a>
+						<a href="{% static 'img/snowboard.jpg' %}" data-lightbox="listimages"></a>
+						<a href="{% static 'img/kayak.jpeg' %}" data-lightbox="listimages"></a>
+						<a href="{% static 'img/kayak.jpeg' %}" data-lightbox="listimages"></a>
+
+
+						<div>
+							<img src="{% static 'img/mbike.jpg' %}" class="smallthumbs">
+							<img src="{% static 'img/snowboard.jpg' %}" class="smallthumbs">
+							<img src="{% static 'img/kayak.jpeg' %}" class="smallthumbs">
+							<img src="{% static 'img/mbike.jpg' %}" class="smallthumbs">
+						</div>
+
+					</div>
+					<!-- Details -->
+					<div class="detail">
+						<h4 class="pb-20">
+							This is the listing title
+						</h4>
+						<p>This is listing's desciption, for example this is a super special awesome Bike!</p>
+						<p class="footer pt-20">
+							<i class="fa fa-user" aria-hidden="true"></i>
+							<span>User</span>
+							<i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
+							<span>Location</span>
+							<i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
+							<span>Available Now!</span>
+						</p>
+						<div class="unavailable">
+							<p class="font-italic">Item unavailable? <a href="#" target="_blank"> Subscribe here
+								</a> to
+								get
+								an email notification when the item becomes available!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-4">
+				<div class="form-wrap">
+					<div class="form-wrap-inn">
+						<div class="frame">
+							<div class="form-content">
+								<div class="header">
+									<h2>Want This Item?</h2>
+									<p>Send a message to the owner to let them know you are interested! </p>
+								</div>
+								<div class="form-group shadow-textarea">
+									<textarea class="form-control z-depth-1" id="exampleFormControlTextarea6" rows="3"
+										placeholder="Write your message here..."></textarea>
+								</div>
+								<div class="text-center button">
+									<input type="submit" value="Send Request"
+										class="btn btn-info btn-block rounded-0 py-2">
+									<p> This will send an email to the owner who will be in contact with you
+										shortly.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- </section> -->
+</div>
 {% endblock %}

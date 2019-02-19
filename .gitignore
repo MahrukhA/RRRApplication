@@ -3,7 +3,6 @@
 *.pyc
 __pycache__/
 local_settings.py
-/media
-/static
+media
 Pipfile
 Pipfile.lock
