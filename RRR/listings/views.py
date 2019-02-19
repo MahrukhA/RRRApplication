@@ -3,7 +3,9 @@ from django.contrib import messages
 from .forms import ListingForm
 from .models import Listing
 from django.core.paginator import Paginator
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.models import User
 
 def listings(request):
     # search query (= None if q POST var isnt set)
@@ -63,7 +65,32 @@ def listings(request):
 
 
 def listing(request, listing_id):
-    return render(request, 'listings/listing.html')
+    specific_listing = Listing.objects.get(id=listing_id)
+    context = {
+        'title': specific_listing.title,
+        'location': specific_listing.location,
+        'description': specific_listing.description,
+        'daily_price': specific_listing.daily_price,
+        'photo_1': specific_listing.photo_1,
+        'photo_2': specific_listing.photo_2,
+        'photo_3': specific_listing.photo_3,
+        'photo_4': specific_listing.photo_4,
+        'photo_5': specific_listing.photo_5,
+        'is_available': specific_listing.is_available,
+        'user': specific_listing.user,
+        'id': listing_id,
+    }
+
+    email_msg = request.POST.get('email_msg', 0) #the message entered by the user to send to the listing owner
+    if email_msg is not 0:#if the user clicked on the submit message button
+        subject = '[RRR] Inquiry about ' + context['title'] #email subject line
+        from_email = request.user.email #who the email is being sent from
+        to_list = [User.objects.get(username=context['user']).email, settings.EMAIL_HOST_USER, from_email] #list of all the users the email is sent to
+
+        send_mail(subject, email_msg, from_email, to_list, fail_silently=True) #Send the email
+        messages.success(request, 'Email sent!')
+
+    return render(request, 'listings/listing.html', context)
 
 
 def create(request):
