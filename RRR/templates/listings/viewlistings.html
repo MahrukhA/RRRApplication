@@ -96,7 +96,7 @@
                         </div>
 
                         <div class="detail">
-                            <a href="./{{ listing.id }}">
+                            <a href="{% url 'listing' listing.id%}">
                                 <h4 class="pb-20">
                                     {{ listing.title }}
                                 </h4>
@@ -107,19 +107,19 @@
                                 <span>{{ listing.user }}</span>
                                 <i class="ml-20 fa fa-map-marker-alt" aria-hidden="true"></i>
                                 {% if listing.location == 0 %}
-                                <span>North Regina</span>
+                                    <span>North Regina</span>
                                 {% elif listing.location == 1 %}
-                                <span>South Regina</span>
+                                    <span>South Regina</span>
                                 {% elif listing.location == 2 %}
-                                <span>East Regina</span>
+                                    <span>East Regina</span>
                                 {% else %}
-                                <span>West Regina</span>
+                                    <span>West Regina</span>
                                 {% endif %}
                                 <i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-                                {% if listing.is_approved %}
-                                <span>Available now!</span>
+                                {% if listing.is_available %}
+                                    <span>Available now!</span>
                                 {% else %}
-                                <span>Not available</span>
+                                    <span>Not available</span>
                                 {% endif %}
                             </p>
                         </div>
