@@ -23,9 +23,7 @@
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'dashboard' %}">My Listings</a>
-                            <a class="dropdown-item" href="{% url 'dashboard' %}">My Profile</a>
                             <a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a>
-
                             <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">
                                 Logout</a>
                             <form action="{% url 'logout' %}" method="POST" id="logout">
@@ -75,13 +73,11 @@
                     <a class="nav-link" href="{% url 'listings' %}">Listings</a>
                 </li>
             </ul>
-
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item mr-3">
                     <a class="nav-link" href="{% url 'dashboard' %}"> Welcome, {{ user.first_name }} </a>
                 </li>
-
                 <li class="nav-item mr-3">
                     <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"> Logout</a>
                     <form action="{% url 'logout' %}" method="POST" id="logout">
