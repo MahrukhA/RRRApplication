@@ -93,7 +93,7 @@ def create(request):
         for i in range(1, 6):
             # booleanFalse if the photo doesnt exist. If the file exists, it is equal to the name of the file (eg pairofskates.png)
             filepath = request.FILES.get('photo_' + str(i), False)
-            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.JPG') or str(filepath).endswith('.png') or str(filepath).endswith('PNG'))):
+            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('PNG'))):
                 messages.error(request, 'Uploaded files must be jpgs or pngs!')
                 return redirect('create')
 
