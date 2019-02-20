@@ -115,7 +115,7 @@ def create(request):
                 request, 'Description must be at least 15 characters long!')
             return redirect('create')
 
-        #price is empty
+        # price is empty
         if (len(str(request.POST['daily_price'])) < 1):
             messages.error(request, 'Price can\'t be blank!')
             return redirect('create')
@@ -157,3 +157,23 @@ def create(request):
         else:
             # logged in user clicked on the Create a Listing button
             return render(request, 'listings/create.html')
+
+
+def edit(request, listing_id):
+    specific_listing = Listing.objects.get(id=listing_id)
+    context = {
+        'title': specific_listing.title,
+        'location': specific_listing.location,
+        'description': specific_listing.description,
+        'daily_price': specific_listing.daily_price,
+        'photo_1': specific_listing.photo_1,
+        'photo_2': specific_listing.photo_2,
+        'photo_3': specific_listing.photo_3,
+        'photo_4': specific_listing.photo_4,
+        'photo_5': specific_listing.photo_5,
+        'is_available': specific_listing.is_available,
+        'user': specific_listing.user,
+        'id': listing_id,
+    }
+
+    return render(request, 'listings/edit.html', context)

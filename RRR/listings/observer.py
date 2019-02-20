@@ -2,6 +2,8 @@ from abc import ABCMeta, abstractmethod
 from .models import Listing
 from django.contrib.auth.models import User
 
+# https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#extending-the-existing-user-model
+
 
 class Subject:
     # Interface Subject (technically abstract...)

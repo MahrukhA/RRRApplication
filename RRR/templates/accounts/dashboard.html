@@ -41,14 +41,14 @@
 								<span>West Regina</span>
 								{% endif %}
 								<i class="ml-20 fa fa-calendar-check" aria-hidden="true"></i>
-								{% if listing.is_approved %}
+								{% if listing.is_available %}
 								<span>Available now!</span>
 								{% else %}
 								<span>Not available</span>
 								{% endif %}
 								<p>
 									<a class="btn btn-danger" href="#" role="button">Delete</a>
-									<a class="btn btn-warning" href="#" role="button">Edit</a>
+									<a class="btn btn-warning" href="{% url 'edit' listing.id %}" role="button">Edit</a>
 								</p>
 							</p>
 						</div>
