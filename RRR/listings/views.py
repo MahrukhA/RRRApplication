@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 
+
 def listings(request):
     # search query (= None if q POST var isnt set)
     query = request.GET.get('q')
@@ -81,13 +82,18 @@ def listing(request, listing_id):
         'id': listing_id,
     }
 
-    email_msg = request.POST.get('email_msg', 0) #the message entered by the user to send to the listing owner
-    if email_msg is not 0:#if the user clicked on the submit message button
-        subject = '[RRR] Inquiry about ' + context['title'] #email subject line
-        from_email = request.user.email #who the email is being sent from
-        to_list = [User.objects.get(username=context['user']).email, settings.EMAIL_HOST_USER, from_email] #list of all the users the email is sent to
+    # the message entered by the user to send to the listing owner
+    email_msg = request.POST.get('email_msg', 0)
+    if email_msg is not 0:  # if the user clicked on the submit message button
+        subject = '[RRR] Inquiry about ' + \
+            context['title']  # email subject line
+        from_email = request.user.email  # who the email is being sent from
+        # list of all the users the email is sent to
+        to_list = [User.objects.get(
+            username=context['user']).email, settings.EMAIL_HOST_USER, from_email]
 
-        send_mail(subject, email_msg, from_email, to_list, fail_silently=True) #Send the email
+        send_mail(subject, email_msg, from_email, to_list,
+                  fail_silently=True)  # Send the email
         messages.success(request, 'Email sent!')
 
     return render(request, 'listings/listing.html', context)

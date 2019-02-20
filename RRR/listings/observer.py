@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
-# https://codereview.stackexchange.com/questions/20938/the-observer-design-pattern-in-python-in-a-more-pythonic-way-plus-unit-testing
+from .models import Listing
+from django.contrib.auth.models import User
 
 
 class Subject:
@@ -32,8 +33,19 @@ class Observer:
         pass
 
 
-class ListingData(Subject):
-    # Concrete Subject
+class ConcreteObserver(User, Observer):
+    class Meta:
+        proxy = True
+
+    def update(self, subject):
+        print('observer was notified successfully about the availability of {0}'.format(
+            subject))
+
+
+class ListingData(Listing, Subject):
+    class Meta:
+        proxy = True
+
     def __init__(self):
         self._observers = []
 
@@ -52,3 +64,7 @@ class ListingData(Subject):
     def notify(self):
         for observer in self._observers:
             observer.update()
+
+    def save(self):
+        super(ListingData, self).save()
+        self.notify()  # notify all observers
