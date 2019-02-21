@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from .observer import ConcreteObserver, ListingData
+from django_postgres_extensions.models.functions import *
 
 
 def listings(request):
@@ -96,6 +97,40 @@ def listing(request, listing_id):
         send_mail(subject, email_msg, from_email, to_list,
                   fail_silently=True)  # Send the email
         messages.success(request, 'Email sent!')
+
+
+    
+    if specific_listing.subscribers is not None:
+        alreadySubscribed = (request.user.email in specific_listing.subscribers) #true if user has subscribed to the listing
+        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
+    else:
+        alreadySubscribed = False
+
+    subscribe = request.POST.get('subscribe', 0) #Set when the user clicks the subscribe button
+    if subscribe is not 0: #User wants to subscribe to the list
+        update_listing = Listing.objects.filter(id=listing_id) #.update() is not available in objects.get() so we can't use specific_listing here
+        if update_listing[0].subscribers is not None:
+            update_listing.update(subscribers = update_listing[0].subscribers + [request.user.email]) #Add to the list
+        else:
+            update_listing.update(subscribers = [request.user.email])
+
+        alreadySubscribed = True
+        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
+
+        messages.success(request, 'Succesfully subscribed!')
+
+    unsubscribe = request.POST.get('unsubscribe', 0)
+    if unsubscribe is not 0:
+        update_listing = Listing.objects.filter(id=listing_id)
+        #update_listing.update(subscribers = update_listing[0].subscribers.remove(request.user.email))
+        update_listing.update(subscribers = ArrayRemove('subscribers', request.user.email))
+
+        alreadySubscribed = False
+        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
+
+        messages.success(request, 'Successfully unsubscribed!')
+
+    
 
     return render(request, 'listings/listing.html', context)
 
