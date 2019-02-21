@@ -19,7 +19,8 @@ class Listing(models.Model):
     is_approved = models.BooleanField(default=False)
     subscribers = ArrayField(
         models.EmailField(blank=True),
-        default=list
+        default=list,
+        blank = True
     )
 
     class Meta:
