@@ -13,6 +13,7 @@ picture5:blob
 is_available: bool              	// default = True
 is_hidden: bool		// default = False
 is_approved : bool		// default = False
+subscribers: Array
 // for viewlistings.html, is_available (true), is_hidden(false), is_approved(true)
 
 ### Users

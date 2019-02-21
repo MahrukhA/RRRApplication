@@ -55,18 +55,24 @@ class ListingData(Listing, Subject):
         if observer not in self._observers:
             self._observers.append(observer)
         else:
-            print('Failed to add: {}'.format(observer))
+            print('Failed to add: {0}'.format(observer))
 
     def remove(self, observer):
         try:
             self._observers.remove(observer)
         except ValueError:
-            print('Failed to remove: {}'.format(observer))
+            print('Failed to remove: {0}'.format(observer))
 
     def notify(self):
         for observer in self._observers:
             observer.update()
 
-    def save(self):
-        super(ListingData, self).save()
-        self.notify()  # notify all observers
+    # def set_availability(self):
+    #     if self.is_available == False:
+    #         self.is_available = True
+    #         super(ListingData, self).save()
+    #         self.notify()
+
+    # def save(self):
+    #     super(ListingData, self).save()
+    #     self.notify()  # notify all observers..?
