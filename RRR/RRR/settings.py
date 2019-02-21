@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_postgres_extensions',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,8 @@ WSGI_APPLICATION = 'RRR.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        #'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_postgres_extensions.backends.postgresql',
         'NAME': 'rrrdb',
         'USER': 'postgres',
         'PASSWORD': 'rrrpwd',
