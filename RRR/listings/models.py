@@ -20,7 +20,6 @@ class Listing(models.Model):
     subscribers = ArrayField(
         models.EmailField(blank=True),
         default=list,
-        blank = True
     )
 
     class Meta:
