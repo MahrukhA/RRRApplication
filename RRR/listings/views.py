@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from .observer import ConcreteObserver, ListingData
-from django_postgres_extensions.models.functions import *
+from django_postgres_extensions.models.functions import ArrayRemove
 
 
 def listings(request):
@@ -99,12 +99,12 @@ def listing(request, listing_id):
         messages.success(request, 'Email sent!')
 
 
-    
-    if specific_listing.subscribers is not None:
+
+    if specific_listing.subscribers is not None and request.user.is_authenticated:
         alreadySubscribed = (request.user.email in specific_listing.subscribers) #true if user has subscribed to the listing
         context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
     else:
-        alreadySubscribed = False
+        alreadySubscribed = False #subscribers list is null so they cant possibly be subscribed to it
 
     subscribe = request.POST.get('subscribe', 0) #Set when the user clicks the subscribe button
     if subscribe is not 0: #User wants to subscribe to the list
@@ -119,10 +119,9 @@ def listing(request, listing_id):
 
         messages.success(request, 'Succesfully subscribed!')
 
-    unsubscribe = request.POST.get('unsubscribe', 0)
-    if unsubscribe is not 0:
+    unsubscribe = request.POST.get('unsubscribe', 0) #set when user clicks unsubscribe
+    if unsubscribe is not 0: #user wants to unsubscribe
         update_listing = Listing.objects.filter(id=listing_id)
-        #update_listing.update(subscribers = update_listing[0].subscribers.remove(request.user.email))
         update_listing.update(subscribers = ArrayRemove('subscribers', request.user.email))
 
         alreadySubscribed = False
