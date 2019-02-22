@@ -4,8 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class Listing(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     location = models.IntegerField()
     description = models.TextField()

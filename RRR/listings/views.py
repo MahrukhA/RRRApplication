@@ -7,58 +7,46 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from .observer import ConcreteObserver, ListingData
-from django_postgres_extensions.models.functions import ArrayRemove
+from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
 
 
 def listings(request):
     # search query (= None if q POST var isnt set)
     query = request.GET.get('q')
     if query is not None:
-        approved_listings_query = Listing.objects.filter(is_approved=True, title__icontains=query).order_by(
-            'id')  # gets all approved listings, and sorts by id in ascending order
+        approved_listings_query = Listing.objects.filter(is_approved=True, title__icontains=query).order_by('id')  # gets all approved listings, and sorts by id in ascending order
     else:
-        approved_listings_query = Listing.objects.filter(is_approved=True).order_by(
-            'id')  # query wasn't entered - display ALL approved listings
+        approved_listings_query = Listing.objects.filter(is_approved=True).order_by('id')  # query wasn't entered - display ALL approved listings
 
     available = request.GET.get('available')
     if available is not None:
-        approved_listings_query = approved_listings_query.filter(
-            is_available=True)
+        approved_listings_query = approved_listings_query.filter(is_available=True)
 
     daily_price = request.GET.get('daily_price')
     if daily_price is not None:
         daily_price = int(daily_price)
         if daily_price == 0:
-            approved_listings_query = approved_listings_query.filter(
-                daily_price__range=(0, 14))
+            approved_listings_query = approved_listings_query.filter(daily_price__range=(0, 14))
         elif daily_price == 1:
-            approved_listings_query = approved_listings_query.filter(
-                daily_price__range=(15, 30))
+            approved_listings_query = approved_listings_query.filter(daily_price__range=(15, 30))
         elif daily_price == 2:
-            approved_listings_query = approved_listings_query.filter(
-                daily_price__range=(31, 50))
+            approved_listings_query = approved_listings_query.filter(daily_price__range=(31, 50))
         elif daily_price == 3:
-            approved_listings_query = approved_listings_query.filter(
-                daily_price__range=(51, 75))
+            approved_listings_query = approved_listings_query.filter(daily_price__range=(51, 75))
         else:
-            approved_listings_query = approved_listings_query.filter(
-                daily_price__range=(76, 1000))
+            approved_listings_query = approved_listings_query.filter(daily_price__range=(76, 1000))
 
     location = request.GET.get('location')
     if location is not None:
         location = int(location)
         if location == 0:
-            approved_listings_query = approved_listings_query.filter(
-                location=0)
+            approved_listings_query = approved_listings_query.filter(location=0)
         elif location == 1:
-            approved_listings_query = approved_listings_query.filter(
-                location=1)
+            approved_listings_query = approved_listings_query.filter(location=1)
         elif location == 2:
-            approved_listings_query = approved_listings_query.filter(
-                location=2)
+            approved_listings_query = approved_listings_query.filter(location=2)
         else:
-            approved_listings_query = approved_listings_query.filter(
-                location=3)
+            approved_listings_query = approved_listings_query.filter(location=3)
 
     paginator = Paginator(approved_listings_query, 3)  # 3 listings per page
     page = request.GET.get('page')  # gets page number from url
@@ -91,45 +79,52 @@ def listing(request, listing_id):
             context['title']  # email subject line
         from_email = request.user.email  # who the email is being sent from
         # list of all the users the email is sent to
-        to_list = [User.objects.get(
-            username=context['user']).email, settings.EMAIL_HOST_USER, from_email]
+        to_list = [User.objects.get(username=context['user']).email, settings.EMAIL_HOST_USER, from_email]
 
-        send_mail(subject, email_msg, from_email, to_list,
-                  fail_silently=True)  # Send the email
+        send_mail(subject, email_msg, from_email, to_list, fail_silently=True)  # Send the email
         messages.success(request, 'Email sent!')
 
 
+    # OBSERVER PATTERN Subscribe
+    # if specific_listing.subscribers is not None and request.user.is_authenticated:
+    #     # true if user has subscribed to the listing
+    #     alreadySubscribed = (request.user.email in specific_listing.subscribers)
+    #     # add to content to determine what to display to the user
+    #     context['subscriber'] = alreadySubscribed
+    # else:
+    #     # subscribers list is null so they cant possibly be subscribed to it
+    #     alreadySubscribed = False
 
-    if specific_listing.subscribers is not None and request.user.is_authenticated:
-        alreadySubscribed = (request.user.email in specific_listing.subscribers) #true if user has subscribed to the listing
-        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
-    else:
-        alreadySubscribed = False #subscribers list is null so they cant possibly be subscribed to it
+    # context['subscriber'] = False
 
-    subscribe = request.POST.get('subscribe', 0) #Set when the user clicks the subscribe button
-    if subscribe is not 0: #User wants to subscribe to the list
-        update_listing = Listing.objects.filter(id=listing_id) #.update() is not available in objects.get() so we can't use specific_listing here
-        if update_listing[0].subscribers is not None:
-            update_listing.update(subscribers = update_listing[0].subscribers + [request.user.email]) #Add to the list
+
+    # Set when the user clicks the subscribe button
+    subscribe = request.POST.get('subscribe', 0)
+    if subscribe is not 0:  # User wants to subscribe to the list
+
+        # CALL SUBSCRIBE IN CONCRETE SUBJECT
+        if request.user.email not in specific_listing.subscribers:
+            specific_listing.subscribers = ArrayAppend('subscribers', request.user.email)
+            specific_listing.save()
         else:
-            update_listing.update(subscribers = [request.user.email])
+            print('email already exists in database!')
 
-        alreadySubscribed = True
-        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
-
+        # add to content to determine what to display to the user
+        context['subscriber'] = True
         messages.success(request, 'Succesfully subscribed!')
 
-    unsubscribe = request.POST.get('unsubscribe', 0) #set when user clicks unsubscribe
-    if unsubscribe is not 0: #user wants to unsubscribe
-        update_listing = Listing.objects.filter(id=listing_id)
-        update_listing.update(subscribers = ArrayRemove('subscribers', request.user.email))
 
-        alreadySubscribed = False
-        context['subscriber'] = alreadySubscribed #add to content to determine what to display to the user
+    # set when user clicks unsubscribe
+    unsubscribe = request.POST.get('unsubscribe', 0)
+    if unsubscribe is not 0:  # user wants to unsubscribe
 
+        # CALL REMOVE IN CONCRETE SUBJECT
+        specific_listing.subscribers = ArrayRemove('subscribers', request.user.email)
+        specific_listing.save()
+
+        # add to content to determine what to display to the user
+        context['subscriber'] = False
         messages.success(request, 'Successfully unsubscribed!')
-
-    
 
     return render(request, 'listings/listing.html', context)
 
@@ -140,14 +135,12 @@ def create(request):
         # 5 and 15 ARE PLACEHOLDER VALUES for right now
         # title is too short
         if (len(request.POST['title']) < 5):
-            messages.error(
-                request, 'Title must be at least 5 characters long!')
+            messages.error(request, 'Title must be at least 5 characters long!')
             return redirect('create')
 
         # description is too short
         if (len(request.POST['description']) < 15):
-            messages.error(
-                request, 'Description must be at least 15 characters long!')
+            messages.error(request, 'Description must be at least 15 characters long!')
             return redirect('create')
 
         # price is empty
@@ -175,8 +168,7 @@ def create(request):
             newListing.user_id = request.user.id
             newListing.save()
 
-            messages.success(
-                request, 'Listing successfully created! It now awaits admin approval')
+            messages.success(request, 'Listing successfully created! It now awaits admin approval')
             return redirect('dashboard')
 
         else:  # error while trying to create a post - this should never happen
