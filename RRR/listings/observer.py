@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from .models import Listing
 from django.contrib.auth.models import User
+from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
+
 
 # https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#extending-the-existing-user-model
 
@@ -35,44 +37,9 @@ class Observer:
         pass
 
 
-class ConcreteObserver(User, Observer):
-    class Meta:
-        proxy = True
+# class ConcreteObserver(User, Observer):
+#     class Meta:
+#         proxy = True
 
-    def update(self, subject):
-        print('observer was notified successfully about the availability of {0}'.format(
-            subject))
-
-
-class ListingData(Listing, Subject):
-    class Meta:
-        proxy = True
-
-    def __init__(self):
-        self._observers = []
-
-    def register(self, observer):
-        if observer not in self._observers:
-            self._observers.append(observer)
-        else:
-            print('Failed to add: {0}'.format(observer))
-
-    def remove(self, observer):
-        try:
-            self._observers.remove(observer)
-        except ValueError:
-            print('Failed to remove: {0}'.format(observer))
-
-    def notify(self):
-        for observer in self._observers:
-            observer.update()
-
-    # def set_availability(self):
-    #     if self.is_available == False:
-    #         self.is_available = True
-    #         super(ListingData, self).save()
-    #         self.notify()
-
-    # def save(self):
-    #     super(ListingData, self).save()
-    #     self.notify()  # notify all observers..?
+#     def update(self, subject):
+#         print('observer was notified successfully about the availability of {0}'.format(subject))

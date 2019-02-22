@@ -86,30 +86,19 @@ def listing(request, listing_id):
 
 
     # OBSERVER PATTERN Subscribe
-    # if specific_listing.subscribers is not None and request.user.is_authenticated:
-    #     # true if user has subscribed to the listing
-    #     alreadySubscribed = (request.user.email in specific_listing.subscribers)
-    #     # add to content to determine what to display to the user
-    #     context['subscriber'] = alreadySubscribed
-    # else:
-    #     # subscribers list is null so they cant possibly be subscribed to it
-    #     alreadySubscribed = False
-
-    # context['subscriber'] = False
-
-
     # Set when the user clicks the subscribe button
     subscribe = request.POST.get('subscribe', 0)
     if subscribe is not 0:  # User wants to subscribe to the list
 
         # CALL SUBSCRIBE IN CONCRETE SUBJECT
-        if request.user.email not in specific_listing.subscribers:
-            specific_listing.subscribers = ArrayAppend('subscribers', request.user.email)
-            specific_listing.save()
-        else:
-            print('email already exists in database!')
+        specific_listing.register(request.user.email)
+        # if request.user.email not in specific_listing.subscribers:
+        #     specific_listing.subscribers = ArrayAppend('subscribers', request.user.email)
+        #     specific_listing.save()
+        # else:
+        #     print('email already exists in database!')
 
-        # add to content to determine what to display to the user
+        # add to context to determine what to display to the user
         context['subscriber'] = True
         messages.success(request, 'Succesfully subscribed!')
 
@@ -119,10 +108,11 @@ def listing(request, listing_id):
     if unsubscribe is not 0:  # user wants to unsubscribe
 
         # CALL REMOVE IN CONCRETE SUBJECT
-        specific_listing.subscribers = ArrayRemove('subscribers', request.user.email)
-        specific_listing.save()
+        specific_listing.remove(request.user.email)
+        # specific_listing.subscribers = ArrayRemove('subscribers', request.user.email)
+        # specific_listing.save()
 
-        # add to content to determine what to display to the user
+        # add to context to determine what to display to the user
         context['subscriber'] = False
         messages.success(request, 'Successfully unsubscribed!')
 
