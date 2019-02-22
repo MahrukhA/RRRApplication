@@ -91,30 +91,40 @@
 							</span>
 						</p>
 						{% if request.user.is_authenticated %}
-							{% if subscriber %} <!--If user has already subscribed to the listing-->
-								<div class="unavailable">
-									<form action="{% url 'listing' id %}" method="POST">
-										{% csrf_token %}
-										<p class="font-italic"><a href="#" target="_blank"> <input type="submit" name="unsubscribe" style="background: none!important; border: none; padding: 0!important; color: blue" value="Unsubscribe here"/>
-											</a> to
-											remove yourself from the emailing list
-										</p>
+						{% if not request.user == user %}
+						{% if subscriber %}
+						<!--If user has already subscribed to the listing-->
+						<div class="unavailable">
+							<form action="{% url 'listing' id %}" method="POST">
+								{% csrf_token %}
+								<p class="font-italic"><a href="#" target="_blank"> <input type="submit"
+											name="unsubscribe"
+											style="background: none!important; border: none; padding: 0!important; color: blue"
+											value="Unsubscribe here" />
+									</a> to
+									remove yourself from the emailing list
+								</p>
 
-									</form>
-								</div>
-							{% else %}<!--User hasn't subscribed to the list-->
-								<div class="unavailable">
-									<form action="{% url 'listing' id %}" method="POST">
-										{% csrf_token %}
-										<p class="font-italic">Item unavailable? <a href="#" target="_blank"> <input type="submit" name="subscribe" style="background: none!important; border: none; padding: 0!important; color: blue" value="Subscribe here"/>
-											</a> to
-											get
-											an email notification when the item becomes available!
-										</p>
+							</form>
+						</div>
+						{% else %}
+						<!--User hasn't subscribed to the list-->
+						<div class="unavailable">
+							<form action="{% url 'listing' id %}" method="POST">
+								{% csrf_token %}
+								<p class="font-italic">Item unavailable? <a href="#" target="_blank"> <input
+											type="submit" name="subscribe"
+											style="background: none!important; border: none; padding: 0!important; color: blue"
+											value="Subscribe here" />
+									</a> to
+									get
+									an email notification when the item becomes available!
+								</p>
 
-									</form>
-								</div>
-							{% endif %}
+							</form>
+						</div>
+						{% endif %}
+						{% endif %}
 						{% endif %}
 					</div>
 				</div>
