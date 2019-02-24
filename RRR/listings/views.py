@@ -3,10 +3,14 @@ from django.contrib import messages
 from .forms import ListingForm
 from .models import Listing
 from django.core.paginator import Paginator
+
 from django.core.mail import send_mail
+import sendgrid
+from sendgrid.helpers.mail import *
+
 from django.conf import settings
 from django.contrib.auth.models import User
-from .observer import ConcreteObserver, ListingData
+#from .observer import ConcreteObserver, ListingData
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
 
 
@@ -75,13 +79,16 @@ def listing(request, listing_id):
     # the message entered by the user to send to the listing owner
     email_msg = request.POST.get('email_msg', 0)
     if email_msg is not 0:  # if the user clicked on the submit message button
+        #The sendgrid API is used to send emails 
+        sg = sendgrid.SendGridAPIClient(settings.SEND_GRID_API_KEY)
+        from_email = Email(request.user.email) #Sender = logged in user issuing the message 
+        to_email = Email(User.objects.get(username=context['user']).email) #Recipient = owner of the listing
         subject = '[RRR] Inquiry about ' + \
-            context['title']  # email subject line
-        from_email = request.user.email  # who the email is being sent from
-        # list of all the users the email is sent to
-        to_list = [User.objects.get(username=context['user']).email, settings.EMAIL_HOST_USER, from_email]
+                   context['title']
+        content = Content("text/plain", email_msg)
+        mail = Mail(from_email, subject, to_email, content) #Formats the email
+        response = sg.client.mail.send.post(request_body = mail.get()) #Sends the email
 
-        send_mail(subject, email_msg, from_email, to_list, fail_silently=True)  # Send the email
         messages.success(request, 'Email sent!')
 
 
