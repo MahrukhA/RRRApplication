@@ -3,7 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from listings.models import Listing
 from django.core.paginator import Paginator
-from .forms import UserForm
+
 
 
 def register(request):
