@@ -11,7 +11,7 @@
 			<div class="row justify-content-center d-flex">
 				<div class="col-lg-9">
 					<h1 class="dashboardhead">My listings</h1>
-					{% for listing in user_listings %}
+					{% for listing in user_listings_query %}
 					<div class="single-list flex-row d-flex">
 						<div class="thumb">
 							<div class="price">
@@ -47,8 +47,17 @@
 								<span>Not available</span>
 								{% endif %}
 								<p>
+								<form method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="set_rented" value="{{ listing.id }}">
+										{% if listing.is_available %}
+										<input type="submit" class="btn btn-warning" value="Rent it out!">
+										{% else %}
+										<input type="submit" class="btn btn-success" value="Make available!">
+										{% endif %} 
+								</form>
 									<a class="btn btn-danger" href="#" role="button">Delete</a>
-									<a class="btn btn-warning" href="{% url 'edit' listing.id %}" role="button">Edit</a>
+									<a class="btn btn-info" href="{% url 'edit' listing.id %}" role="button">Edit</a>
 								</p>
 							</p>
 						</div>

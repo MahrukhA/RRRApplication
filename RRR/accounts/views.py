@@ -71,12 +71,24 @@ def logout(request):
 
 
 def dashboard(request):
-    user_listings_query = Listing.objects.filter(
-        user_id=request.user).order_by('id')
+    user_listings_query = Listing.objects.filter(user_id=request.user).order_by('id')
     paginator = Paginator(user_listings_query, 10)
     page = request.GET.get('page')
     user_listings = paginator.get_page(page)
-    return render(request, 'accounts/dashboard.html', {'user_listings': user_listings})
+
+    if request.method == 'POST':
+        specific_listing = Listing.objects.get(id=request.POST['set_rented'])
+        if specific_listing.is_available is True:
+            specific_listing.is_available = False
+            specific_listing.save()
+            messages.warning(request, '{0} will no longer be shown as available!'.format(specific_listing))
+        else:
+            specific_listing.is_available = True
+            specific_listing.save()
+            specific_listing.notify()
+            messages.success(request, '{0} will now be available for others to rent! Subscribers will also be notified.'.format(specific_listing))
+
+    return render(request, 'accounts/dashboard.html', {'user_listings_query': user_listings_query, 'user_listings': user_listings})
 
 
 def profile(request):

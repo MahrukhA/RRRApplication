@@ -1,10 +1,49 @@
 from django.db import models
+from abc import ABCMeta, abstractmethod
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
+from django.contrib.auth.models import User
 
 
-class Listing(models.Model):
+class Subject:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def register(self, observer):
+        """Registers an observer to Subject."""
+        pass
+
+    @abstractmethod
+    def remove(self, observer):
+        """Removes an observer from Subject."""
+        pass
+
+    @abstractmethod
+    def notify(self):
+        """Notifies observers that Subject data has changed."""
+        pass
+
+
+class Observer:
+    # Interface Observer (technically abstract...)
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def update(self):
+        """Observer notifies subject that it has become aware of the changes."""
+        pass
+
+
+class ConcreteObserver(User, Observer):
+    class Meta:
+        proxy = True
+
+    def update(self, subject):
+        print('Subscriber {0} was notified successfully about the availability of {1}'.format(self.username, subject))
+
+
+class Listing(models.Model, Subject):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     location = models.IntegerField()
@@ -35,19 +74,15 @@ class Listing(models.Model):
             self.subscribers = ArrayAppend('subscribers', observer)
             super(Listing, self).save()
         else:
-            print('email already exists in database!')
+            print('Already subscribed!')
     
     def remove(self, observer):
         try:
             self.subscribers = ArrayRemove('subscribers', observer)
             super(Listing, self).save()
         except ValueError:
-            print('failed to remove email!')
+            print('Failed to remove!')
 
-    # def notify(self):
-    #     for observer in self.subscribers:
-    #         observer.update()
-
-    # def save(self):
-    #     super(ListingData, self).save()
-    #     self.notify()  # notify all observers..?
+    def notify(self):
+        for sub in self.subscribers:
+            ConcreteObserver.objects.get(email=sub).update(self.title)

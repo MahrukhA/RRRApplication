@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 #Using SendGrid
-SEND_GRID_####API_KEY = 'S####G####._L7Brk8iR9yn-cqP335tjw.#############TqMB9Sj7r3xyGdDnkhquQxOJgSWIvSJ27SJMuFQ2h30'
+SEND_GRID_#####API_KEY = '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'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'cs207presentation@gmail.com'
 EMAIL_HOST_PASSWORD = 'Rentables1'
@@ -152,5 +152,6 @@ MEDIA_URL = '/media/'
 # Messgaes
 MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
-    messages.SUCCESS: 'alert-success'
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning'
 }
