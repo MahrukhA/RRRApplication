@@ -3,11 +3,8 @@ from django.contrib import messages
 from .forms import ListingForm
 from .models import Listing
 from django.core.paginator import Paginator
-
-from django.core.mail import send_mail
 import sendgrid
 from sendgrid.helpers.mail import *
-
 from django.conf import settings
 from django.contrib.auth.models import User
 #from .observer import ConcreteObserver, ListingData
@@ -18,9 +15,9 @@ def listings(request):
     # search query (= None if q POST var isnt set)
     query = request.GET.get('q')
     if query is not None:
-        approved_listings_query = Listing.objects.filter(is_approved=True, title__icontains=query).order_by('id')  # gets all approved listings, and sorts by id in ascending order
+        approved_listings_query = Listing.objects.filter(is_approved=True, title__icontains=query).order_by('-id')  # gets all approved listings, and sorts by id in ascending order
     else:
-        approved_listings_query = Listing.objects.filter(is_approved=True).order_by('id')  # query wasn't entered - display ALL approved listings
+        approved_listings_query = Listing.objects.filter(is_approved=True).order_by('-id')  # query wasn't entered - display ALL approved listings
 
     available = request.GET.get('available')
     if available is not None:
@@ -151,7 +148,7 @@ def create(request):
         for i in range(1, 6):
             # booleanFalse if the photo doesnt exist. If the file exists, it is equal to the name of the file (eg pairofskates.png)
             filepath = request.FILES.get('photo_' + str(i), False)
-            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('PNG'))):
+            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('.PNG'))):
                 messages.error(request, 'Uploaded files must be jpgs or pngs!')
                 return redirect('create')
 
