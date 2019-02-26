@@ -88,7 +88,7 @@ def listing(request, listing_id):
         to_email = Email(User.objects.get(username=context['user']).email) #Recipient = owner of the listing
         subject = '[RRR] Inquiry about ' + \
                    context['title']
-        content = Content("text/plain", email_msg + "This email was sent to you by RRR. Please fuck off to unsubscribe!")
+        content = Content("text/plain", email_msg)
         mail = Mail(from_email, subject, to_email, content) #Formats the email
         response = sg.client.mail.send.post(request_body=mail.get()) #Sends the email
 
