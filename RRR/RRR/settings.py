@@ -11,23 +11,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-#FOR GMAIL
-'''
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'RRRentables@gmail.com'
-EMAIL_HOST_PASSWORD = 'coconutRRR'
-EMAIL_PORT = 587
-'''
-
-SEND_GRID_API_KEY = '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'
+#Using SendGrid
+SEND_GRID_API_KEY = 'S####G####._L7Brk8iR9yn-cqP335tjw.#############TqMB9Sj7r3xyGdDnkhquQxOJgSWIvSJ27SJMuFQ2h30'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'RRRentables@gmail.com'
-EMAIL_HOST_PASSWORD = 'coconutRRR1'
+EMAIL_HOST_USER = 'cs207presentation@gmail.com'
+EMAIL_HOST_PASSWORD = 'Rentables1'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'RRRentables@gmail.com'
-ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Test'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 import os
@@ -45,7 +35,9 @@ SECRET_KEY = '#y#3v!_b7ilr8wz@r_dvq$mc%(!is_6xhh260($0k5gs)y8jih'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*",
+]
 
 
 # Application definition
