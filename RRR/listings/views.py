@@ -11,6 +11,12 @@ from django.contrib.auth.models import User
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
 
 
+
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+
 def listings(request):
     # search query (= None if q POST var isnt set)
     query = request.GET.get('q')
@@ -77,17 +83,16 @@ def listing(request, listing_id):
     email_msg = request.POST.get('email_msg', 0)
     if email_msg is not 0:  # if the user clicked on the submit message button
         #The sendgrid API is used to send emails 
-        sg = sendgrid.SendGridAPIClient(settings.SEND_GRID_API_KEY)
+        sg = sendgrid.SendGridAPIClient(apikey=settings.SEND_GRID_API_KEY)
         from_email = Email(request.user.email) #Sender = logged in user issuing the message 
         to_email = Email(User.objects.get(username=context['user']).email) #Recipient = owner of the listing
         subject = '[RRR] Inquiry about ' + \
                    context['title']
-        content = Content("text/plain", email_msg)
+        content = Content("text/plain", email_msg + "This email was sent to you by RRR. Please fuck off to unsubscribe!")
         mail = Mail(from_email, subject, to_email, content) #Formats the email
-        response = sg.client.mail.send.post(request_body = mail.get()) #Sends the email
+        response = sg.client.mail.send.post(request_body=mail.get()) #Sends the email
 
         messages.success(request, 'Email sent!')
-
 
     # OBSERVER PATTERN Subscribe
     # Set when the user clicks the subscribe button
