@@ -139,6 +139,7 @@
 									<h2>Want This Item?</h2>
 									<p>Send a message to the owner to let them know you are interested! </p>
 								</div>
+								{% if request.user.is_authenticated %}
 								<form action="{% url 'listing' id %}" method="POST">
 									{% csrf_token %}
 									<div class="form-group shadow-textarea">
@@ -154,6 +155,9 @@
 										</p>
 									</div>
 								</form>
+								{% else %}
+									<a href="{% url 'login' %}"><p class="btn btn-info btn-block rounded-0 py-2"> Please log in </p></a>
+								{% endif %}
 							</div>
 						</div>
 					</div>
