@@ -26,7 +26,6 @@ class Subject:
 
 
 class Observer:
-    # Interface Observer (technically abstract...)
     __metaclass__ = ABCMeta
 
     @abstractmethod

@@ -7,11 +7,7 @@ import sendgrid
 from sendgrid.helpers.mail import *
 from django.conf import settings
 from django.contrib.auth.models import User
-#from .observer import ConcreteObserver, ListingData
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
-
-
-
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -101,11 +97,6 @@ def listing(request, listing_id):
 
         # CALL SUBSCRIBE IN CONCRETE SUBJECT
         specific_listing.register(request.user.email)
-        # if request.user.email not in specific_listing.subscribers:
-        #     specific_listing.subscribers = ArrayAppend('subscribers', request.user.email)
-        #     specific_listing.save()
-        # else:
-        #     print('email already exists in database!')
 
         # add to context to determine what to display to the user
         context['subscriber'] = True
@@ -118,8 +109,6 @@ def listing(request, listing_id):
 
         # CALL REMOVE IN CONCRETE SUBJECT
         specific_listing.remove(request.user.email)
-        # specific_listing.subscribers = ArrayRemove('subscribers', request.user.email)
-        # specific_listing.save()
 
         # add to context to determine what to display to the user
         context['subscriber'] = False

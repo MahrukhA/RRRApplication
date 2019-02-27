@@ -5,7 +5,6 @@ from listings.models import Listing
 from django.core.paginator import Paginator
 
 
-
 def register(request):
     if request.method == 'POST':
         # create variables for the form values
