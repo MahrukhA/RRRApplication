@@ -90,15 +90,16 @@ a, a:focus, a:hover {
 .single-list .price {
   position: absolute;
   font-size: 14px;
-  padding: 15px;
-  width: 85px;
+  padding-top:3px;
+  width: 60px;
+  height:60px;
   background-color: #222;
   text-align: center;
   color: #fff;
 }
 
 .single-list .price span {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
 }
 
