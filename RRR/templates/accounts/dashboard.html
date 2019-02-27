@@ -46,20 +46,18 @@
 								{% else %}
 								<span>Not available</span>
 								{% endif %}
-								<p>
-								<form method="POST">
+								
+								<form method="POST" class="form-inline"><p>
+										<a class="btn btn-danger" href="{% url 'delete' listing.id %}"  role="button">Delete</a>
+										<a class="btn btn-info" href="{% url 'edit' listing.id %}" role="button">Edit</a>
 										{% csrf_token %}
 										<input type="hidden" name="set_rented" value="{{ listing.id }}">
 										{% if listing.is_available %}
 										<input type="submit" class="btn btn-warning" value="Rent it out!">
 										{% else %}
 										<input type="submit" class="btn btn-success" value="Make available!">
-										{% endif %} 
-								</form>
-									<a class="btn btn-danger" href="#" role="button">Delete</a>
-									<a class="btn btn-info" href="{% url 'edit' listing.id %}" role="button">Edit</a>
-								</p>
-							</p>
+										{% endif %}
+								</p></form>
 						</div>
 					</div>
 					{% endfor %}
