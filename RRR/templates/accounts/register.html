@@ -15,7 +15,25 @@
                 <div class="card-body">
                     <!-- Errors -->
                     {% include 'partials/_alerts.html' %}
-                    <form action="{% url 'register' %}" method="POST">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in register_form %}
+                        <p>
+                            <span style="color: #fff">{{ field.label_tag }}</span><br>
+                            {{ field }}
+                            {% if field.help_text %}
+                            <small style="color: #FEDC3D">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </p>
+                        {% endfor %}
+                        <div class="form-group">
+                            <button type="submit" class="btn float-right login_btn">Sign up</button>
+                        </div>
+                    </form>
+                    <!-- <form action="{% url 'register' %}" method="POST">
                         {% csrf_token %}
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
@@ -57,11 +75,11 @@
                         <div class="form-group">
                             <input type="submit" value="REGISTER" class="btn float-right login_btn">
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="card-footer">
                     <div class="d-flex justify-content-center links">
-                        Already have an account? <a href="{% url 'login' %}" class="btn">Log In</a>
+                        Already have an account? <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
                     </div>
                 </div>
             </div>

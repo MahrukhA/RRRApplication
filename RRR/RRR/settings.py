@@ -155,3 +155,7 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning'
 }
+
+# Login Redirect
+LOGIN_REDIRECT_URL = '/accounts/dashboard'
+LOGOUT_REDIRECT_URL = '/'
