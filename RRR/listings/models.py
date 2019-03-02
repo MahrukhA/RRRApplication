@@ -87,7 +87,7 @@ class Listing(models.Model, Subject):
 
     def notify(self):
         subject = '[RRR] ' + self.title + ' is now available!'
-        message = 'Hey! You were subscribed to ' + self.title + ' and we just wanted to let you know it\'s now available to rent out!'
+        message = 'Hey! You were subscribed to ' + self.title + ' and we just wanted to let you know it\'s now available to be rented!'
         from_email = settings.EMAIL_HOST_USER
         to_email = []
         for sub in self.subscribers:
