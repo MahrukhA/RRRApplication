@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ListingForm
-from .models import Listing
+from .models import Listing,  ConcreteCreator
 from django.core.paginator import Paginator
-import sendgrid
 from sendgrid.helpers.mail import *
 from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
 from django.core import mail
@@ -78,17 +78,16 @@ def listing(request, listing_id):
     # the message entered by the user to send to the listing owner
     email_msg = request.POST.get('email_msg', 0)
     if email_msg is not 0:  # if the user clicked on the submit message button
-        #The sendgrid API is used to send emails 
-        sg = sendgrid.SendGridAPIClient(apikey=settings.SEND_GRID_API_KEY)
-        from_email = Email(request.user.email) #Sender = logged in user issuing the message 
-        to_email = Email(User.objects.get(username=context['user']).email) #Recipient = owner of the listing
-        subject = '[RRR] Inquiry about ' + \
-                   context['title']
-        content = Content("text/plain", email_msg)
-        mail = Mail(from_email, subject, to_email, content) #Formats the email
-        response = sg.client.mail.send.post(request_body=mail.get()) #Sends the email
+        #Email sent using GMAIL
+        subject = '[RRR] New inquiry about ' + context['title']
+        email_msg = email_msg + '\n\n\n\nThis is an automated email. Do not respond to this email!\nPlease respond to: ' + request.user.email
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [User.objects.get(username=context['user']).email] #owner of the listing
 
-        messages.success(request, 'Email sent!')
+        send_mail(subject, email_msg, from_email, to_email, fail_silently=True)
+        message = ConcreteCreator(request, 0, 'Email sent!').create()
+        message.display()
+
 
     # OBSERVER PATTERN Subscribe
     # Set when the user clicks the subscribe button
@@ -100,7 +99,8 @@ def listing(request, listing_id):
 
         # add to context to determine what to display to the user
         context['subscriber'] = True
-        messages.success(request, 'Succesfully subscribed!')
+        message = ConcreteCreator(request, 0, 'Successfully subscribed!').create()
+        message.display()
 
 
     # set when user clicks unsubscribe
@@ -112,7 +112,8 @@ def listing(request, listing_id):
 
         # add to context to determine what to display to the user
         context['subscriber'] = False
-        messages.success(request, 'Successfully unsubscribed!')
+        message = ConcreteCreator(request, 0, 'Successfully unsubscribed!').create()
+        message.display()
 
     return render(request, 'listings/listing.html', context)
 
@@ -123,17 +124,20 @@ def create(request):
         # 5 and 15 ARE PLACEHOLDER VALUES for right now
         # title is too short
         if (len(request.POST['title']) < 5):
-            messages.error(request, 'Title must be at least 5 characters long!')
+            message = ConcreteCreator(request, 1, 'Title must be at least 5 characters long!').create()
+            message.display()
             return redirect('create')
 
         # description is too short
         if (len(request.POST['description']) < 15):
-            messages.error(request, 'Description must be at least 15 characters long!')
+            message = ConcreteCreator(request, 1, 'Description must be at least 15 characters long!').create()
+            message.display()
             return redirect('create')
 
         # price is empty
         if (len(str(request.POST['daily_price'])) < 1):
-            messages.error(request, 'Price can\'t be blank!')
+            message = ConcreteCreator(request, 1, 'Price can\'t be blank!').create()
+            message.display()
             return redirect('create')
 
         # uploaded file must be a jpg
@@ -142,8 +146,9 @@ def create(request):
         for i in range(1, 6):
             # booleanFalse if the photo doesnt exist. If the file exists, it is equal to the name of the file (eg pairofskates.png)
             filepath = request.FILES.get('photo_' + str(i), False)
-            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('.PNG'))):
-                messages.error(request, 'Uploaded files must be jpgs or pngs!')
+            if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.JPG') or str(filepath).endswith('.JPEG') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('.PNG'))):
+                message = ConcreteCreator(request, 1, 'Uploaded files must be jpgs or pngs!').create()
+                message.display()
                 return redirect('create')
 
         # Stores user entered information in a form automatically
@@ -156,18 +161,21 @@ def create(request):
             newListing.user_id = request.user.id
             newListing.save()
 
-            messages.success(request, 'Listing successfully created! It now awaits admin approval')
+            message = ConcreteCreator(request, 0, 'Listing successfully created! It now awaits admin approval').create()
+            message.display()
             return redirect('dashboard')
 
         else:  # error while trying to create a post - this should never happen
-            messages.error(request, 'Error! Please try again.')
+            message = ConcreteCreator(request, 1, 'Error! Please try again').create()
+            message.display()
             return redirect('create')
 
     else:
         # can only view the create a listing page if they are logged in
         if not request.user.is_authenticated:
             # create a listing redirects to login when not logged in, so this redirect will happen when users type in the url for the create page instead of clicking on the button
-            messages.error(request, 'Must be logged in to create a listing!')
+            message = ConcreteCreator(request, 1, 'Must be logged in to create a listing!').create()
+            message.display()
             return redirect('login')
         else:
             # logged in user clicked on the Create a Listing button
@@ -182,17 +190,20 @@ def edit(request, listing_id):
         try:
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Your post has been updated')
+                message = ConcreteCreator(request, 0, 'Your post has been updated!').create()
+                message.display()
         except Exception as e:
-            messages.error(request, 'Your post was not saved due to error')
+            message = ConcreteCreator(request, 1, 'Your post was not saved due to an error. Please try again!').create()
+            message.display()
     else:
         form = ListingForm(instance=specific_listing)
-        messages.error(request, "not form")
+        message = ConcreteCreator(request, 1, 'Not a form! Please try again').create()
+        message.display()
 
     context = {
         'form':form,
         'title': specific_listing.title,
-	}
+    }
 
     return render(request, 'listings/create.html', context)
 
@@ -201,7 +212,8 @@ def delete(request, listing_id):
     
     form = ListingForm(request.POST, instance=specific_listing)
     specific_listing.delete()
-    messages.success(request, 'Your listing was successfully deleted')
+    message = ConcreteCreator(request, 0, 'Your post was successfully deleted, friend!').create()
+    message.display()
     return redirect('dashboard')
     
     context = {

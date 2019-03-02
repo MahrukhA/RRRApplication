@@ -9,6 +9,78 @@ from django.core.mail import send_mail
 
 
 
+class Creator:
+    """
+    Declares the factory method, and returns an object of type Message.
+    The object will either be a success, error, or warning message
+    Success is chosen when a successful operation has been performed (eg. successful account creation)
+    Error is chosen when an operation has failed (eg. the user entered an incorrect while trying to update their account info)
+    Warning is chosen when a user marks any of their listings as unavailable
+    The appropriate message will then be displayed to the user
+    """
+    __metaclass__ = ABCMeta
+
+    def __init__(self, request, context, message):
+        """Initialize object state"""
+        self.request = request
+        self.context = context
+        self.message = message
+
+    @abstractmethod
+    def create(self):
+        """Creates a message object based on the type of message to display to the user"""
+        pass
+
+class ConcreteCreator(Creator):
+    class Meta:
+        proxy = True
+
+    def create(self):
+        """Creates an object based on the context of what just happened"""
+        if (self.context == 0): #Success
+            return ConcreteSuccessMessage(self.request, self.context, self.message)
+        elif (self.context == 1): #Error
+            return ConcreteErrorMessage(self.request, self.context, self.message)
+        else: #Warning
+            return ConcreteWarningMessage(self.request, self.context, self.message)
+
+class Message:
+    """Abstract class for all three message classes"""
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def display(self):
+        pass
+
+class ConcreteSuccessMessage(Creator, Message):
+    """Success message"""
+    class Meta:
+        proxy = True
+
+
+    def display(self):
+        messages.success(self.request, self.message)
+
+
+class ConcreteErrorMessage(Creator, Message):
+    """Error message"""
+    class Meta:
+        proxy = True
+
+    def display(self):
+        messages.error(self.request, self.message)
+
+
+class ConcreteWarningMessage(Creator, Message):
+    """Warning message"""
+    class Meta:
+        proxy = True
+
+    def display(self):
+        messages.warning(self.request, self.message)
+
+
+
 class Subject:
     __metaclass__ = ABCMeta
 
