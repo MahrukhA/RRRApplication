@@ -85,7 +85,7 @@ def listing(request, listing_id):
         to_email = [User.objects.get(username=context['user']).email] #owner of the listing
 
         send_mail(subject, email_msg, from_email, to_email, fail_silently=True)
-        message = ConcreteCreator(request, 0, 'Email sent!').create()
+        message = ConcreteCreator(request, "success", 'Email sent!').create()
         message.display()
 
 
@@ -99,7 +99,7 @@ def listing(request, listing_id):
 
         # add to context to determine what to display to the user
         context['subscriber'] = True
-        message = ConcreteCreator(request, 0, 'Successfully subscribed!').create()
+        message = ConcreteCreator(request, "success", 'Successfully subscribed!').create()
         message.display()
 
 
@@ -112,7 +112,7 @@ def listing(request, listing_id):
 
         # add to context to determine what to display to the user
         context['subscriber'] = False
-        message = ConcreteCreator(request, 0, 'Successfully unsubscribed!').create()
+        message = ConcreteCreator(request, "success", 'Successfully unsubscribed!').create()
         message.display()
 
     return render(request, 'listings/listing.html', context)
@@ -124,19 +124,19 @@ def create(request):
         # 5 and 15 ARE PLACEHOLDER VALUES for right now
         # title is too short
         if (len(request.POST['title']) < 5):
-            message = ConcreteCreator(request, 1, 'Title must be at least 5 characters long!').create()
+            message = ConcreteCreator(request, "error", 'Title must be at least 5 characters long!').create()
             message.display()
             return redirect('create')
 
         # description is too short
         if (len(request.POST['description']) < 15):
-            message = ConcreteCreator(request, 1, 'Description must be at least 15 characters long!').create()
+            message = ConcreteCreator(request, "error", 'Description must be at least 15 characters long!').create()
             message.display()
             return redirect('create')
 
         # price is empty
         if (len(str(request.POST['daily_price'])) < 1):
-            message = ConcreteCreator(request, 1, 'Price can\'t be blank!').create()
+            message = ConcreteCreator(request, "error", 'Price can\'t be blank!').create()
             message.display()
             return redirect('create')
 
@@ -147,7 +147,7 @@ def create(request):
             # booleanFalse if the photo doesnt exist. If the file exists, it is equal to the name of the file (eg pairofskates.png)
             filepath = request.FILES.get('photo_' + str(i), False)
             if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.JPG') or str(filepath).endswith('.JPEG') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('.PNG'))):
-                message = ConcreteCreator(request, 1, 'Uploaded files must be jpgs or pngs!').create()
+                message = ConcreteCreator(request, "error", 'Uploaded files must be jpgs or pngs!').create()
                 message.display()
                 return redirect('create')
 
@@ -161,12 +161,12 @@ def create(request):
             newListing.user_id = request.user.id
             newListing.save()
 
-            message = ConcreteCreator(request, 0, 'Listing successfully created! It now awaits admin approval').create()
+            message = ConcreteCreator(request, "success", 'Listing successfully created! It now awaits admin approval').create()
             message.display()
             return redirect('dashboard')
 
         else:  # error while trying to create a post - this should never happen
-            message = ConcreteCreator(request, 1, 'Error! Please try again').create()
+            message = ConcreteCreator(request, "error", 'Error! Please try again').create()
             message.display()
             return redirect('create')
 
@@ -174,7 +174,7 @@ def create(request):
         # can only view the create a listing page if they are logged in
         if not request.user.is_authenticated:
             # create a listing redirects to login when not logged in, so this redirect will happen when users type in the url for the create page instead of clicking on the button
-            message = ConcreteCreator(request, 1, 'Must be logged in to create a listing!').create()
+            message = ConcreteCreator(request, "error", 'Must be logged in to create a listing!').create()
             message.display()
             return redirect('login')
         else:
@@ -190,14 +190,14 @@ def edit(request, listing_id):
         try:
             if form.is_valid():
                 form.save()
-                message = ConcreteCreator(request, 0, 'Your post has been updated!').create()
+                message = ConcreteCreator(request, "success", 'Your post has been updated!').create()
                 message.display()
         except Exception as e:
-            message = ConcreteCreator(request, 1, 'Your post was not saved due to an error. Please try again!').create()
+            message = ConcreteCreator(request, "error", 'Your post was not saved due to an error. Please try again!').create()
             message.display()
     else:
         form = ListingForm(instance=specific_listing)
-        message = ConcreteCreator(request, 1, 'Not a form! Please try again').create()
+        message = ConcreteCreator(request, "error", 'Not a form! Please try again').create()
         message.display()
 
     context = {
@@ -212,7 +212,7 @@ def delete(request, listing_id):
     
     form = ListingForm(request.POST, instance=specific_listing)
     specific_listing.delete()
-    message = ConcreteCreator(request, 0, 'Your post was successfully deleted, friend!').create()
+    message = ConcreteCreator(request, "success", 'Your post was successfully deleted, friend!').create()
     message.display()
     return redirect('dashboard')
     
