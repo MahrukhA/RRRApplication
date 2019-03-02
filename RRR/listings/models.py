@@ -4,6 +4,9 @@ from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django_postgres_extensions.models.functions import ArrayRemove, ArrayAppend
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.core.mail import send_mail
+
 
 
 class Subject:
@@ -83,5 +86,14 @@ class Listing(models.Model, Subject):
             print('Failed to remove!')
 
     def notify(self):
+        subject = '[RRR] ' + self.title + ' is now available!'
+        message = 'Hey! You were subscribed to ' + self.title + ' and we just wanted to let you know it\'s now available to rent out!'
+        from_email = settings.EMAIL_HOST_USER
+        to_email = []
         for sub in self.subscribers:
             ConcreteObserver.objects.get(email=sub).update(self.title)
+            to_email.append(sub) #adds all subscribers to the emailing list
+
+        send_mail(subject, message, from_email, to_email, fail_silently=True) #send the email to all subscribers
+
+
