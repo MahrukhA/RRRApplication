@@ -429,17 +429,17 @@ width: 100px;
 }
 
 .alert{
-    font-size:10px;
-    padding-left:4px;
-    padding-top:0px;
-    padding-bottom:0px;
-    padding-left:3px;
-    width:63%;
-  }
+font-size:10px;
+padding-left:4px;
+padding-top:0px;
+padding-bottom:0px;
+width:100%;
+}
 
 .loginalert{
-  width:100%;
+width:100%;
 }
+
 .links{
 color: black;
 }

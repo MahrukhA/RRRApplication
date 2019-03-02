@@ -176,7 +176,7 @@ def create(request):
 def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
         
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ListingForm(request.POST, instance=specific_listing)
         
         try:
