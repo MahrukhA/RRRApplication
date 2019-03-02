@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
-from listings.models import Listing
+from listings.models import Listing, ConcreteCreator
 from django.core.paginator import Paginator
 from .forms import RegisterForm
 
@@ -11,7 +11,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Registration successful!')
+            message = ConcreteCreator(request, 0, 'Your account has been created!').create()
+            message.display()
             return redirect('login')
     else:
         form = RegisterForm()
@@ -29,19 +30,22 @@ def dashboard(request):
         if specific_listing.is_available is True:
             specific_listing.is_available = False
             specific_listing.save()
-            messages.warning(request, '{0} will no longer be shown as available!'.format(specific_listing))
+            message = ConcreteCreator(request, 2, str(specific_listing) + ' will no longer be shown as available!').create()
+            message.display()
         else:
             specific_listing.is_available = True
             specific_listing.save()
             specific_listing.notify()
-            messages.success(request, '{0} will now be available for others to rent! Subscribers will also be notified.'.format(specific_listing))
+            message = ConcreteCreator(request, 0, str(specific_listing) + ' will now be available for others to rent! Subscribers will also be notified').create()
+            message.display()
 
     return render(request, 'accounts/dashboard.html', {'user_listings_query': user_listings_query, 'user_listings': user_listings})
 
 
 def profile(request):
     if request.user.is_authenticated is False:  # User must be logged in to view their Edit Profile page
-        messages.error(request, 'You must be logged in to view this page!')
+        message = ConcreteCreator(request, 1, 'You must be logged in to view this page!').create()
+        message.display()
         return redirect('login')
 
     user_account = User.objects.get(id=request.user.id)
@@ -63,28 +67,33 @@ def profile(request):
 
         # one or more required fields left blank
         if not (first_name and last_name and username and email and old_password):
-            messages.error(request, 'Only the new passworld fields can be left blank! Please try again')
+            message = ConcreteCreator(request, 1, 'Only the new password fields can be left blank! Please try again').create()
+            message.display()
             return render(request, 'accounts/profile.html', context)
 
         if confirm_new_password != new_password:  # new password and confirm new password didnt match
-            messages.error(request, 'New password fields did not match! Please try again')
+            message = ConcreteCreator(request, 1, 'New password fields did not match! Please try again').create()
+            message.display()
             return render(request, 'accounts/profile.html', context)
 
         # true when old_password matches the users actual password
         check_password = auth.authenticate(username=request.user.username, password=old_password)
 
         if check_password is None:  # User entered an incorrect password
-            messages.error(request, 'Invalid password! Please try again.')
+            message = ConcreteCreator(request, 1, 'Invalid old password! Please try again').create()
+            message.display()
             return render(request, 'accounts/profile.html', context)
 
         # username already exists
         if User.objects.filter(username=username).exists() and (username != context['username']):
-            messages.error(request, 'Username already taken!')
+            message = ConcreteCreator(request, 1, 'Username already taken!').create()
+            message.display()
             return render(request, 'accounts/profile.html', context)
 
         # email already exists
         if User.objects.filter(email=email).exists() and (email != context['email']):
-            messages.error(request, 'Email already taken!')
+            message = ConcreteCreator(request, 1, 'Email already taken!').create()
+            message.display()
             return render(request, 'accounts/profile.html', context)
 
         # Update account information
@@ -103,7 +112,8 @@ def profile(request):
             user_account.set_password(new_password)
 
         user_account.save()
-        messages.success(request, 'Info successfully updated!')
+        message = ConcreteCreator(request, 0, 'Info successfully updated!').create()
+        message.display()
 
         if new_password:  # Must re-login if a new password has been set, or you will be logged out when updating your password
             auth.login(request, auth.authenticate(
