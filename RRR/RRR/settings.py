@@ -11,14 +11,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-#Using SendGrid
-SEND_GRID_API_KEY = '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'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'cs207presentation@gmail.com'
-EMAIL_HOST_PASSWORD = 'Rentables1'
-EMAIL_PORT = 587
+#FOR GMAIL
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'RRRentables@gmail.com'
+EMAIL_HOST_PASSWORD = 'coconutRRR'
+EMAIL_PORT = 587
 
 import os
 
