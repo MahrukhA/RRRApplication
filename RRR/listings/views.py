@@ -175,19 +175,25 @@ def create(request):
 
 def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
-
-    form = ListingForm(request.POST, instance=specific_listing)
         
-    try:
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your post has been updated')
-    except Exception as e:
-        messages.error(request, 'Your post was not saved due to error')
+    if request.method == 'POST':
+        form = ListingForm(request.POST, instance=specific_listing)
+        
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your post has been updated')
+        except Exception as e:
+            messages.error(request, 'Your post was not saved due to error')
+    else:
+        form = ListingForm(instance=specific_listing)
+        messages.error(request, "not form")
 
     context = {
-		'form':form,
+        'form':form,
+        'title': specific_listing.title,
 	}
+
     return render(request, 'listings/create.html', context)
 
 def delete(request, listing_id):

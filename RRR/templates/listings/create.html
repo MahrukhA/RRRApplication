@@ -13,7 +13,7 @@
 				</div>
 				<div class="card-body create-body">
 					{% include 'partials/_alerts.html' %}
-					<form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+					<form method="POST">
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="title">Title</label>
@@ -33,14 +33,15 @@
 						<div class="form-group">
 							<label for="location">Location</label><br />
 							<!--radio buttons doesn't create a new line automatically--->
-							<input type="radio" name="location" value="0"><span>North Regina</span><br />
-							<input type="radio" name="location" value="1"><span>South Regina</span><br />
-							<input type="radio" name="location" value="2"><span>East Regina</span><br />
-							<input type="radio" name="location" value="3"><span>West Regina</span>
+							<input type="radio" name="location" value="0"><span> North Regina</span><br />
+							<input type="radio" name="location" value="1"><span> South Regina</span><br />
+							<input type="radio" name="location" value="2"><span> East Regina</span><br />
+							<input type="radio" name="location" value="3"><span> West Regina</span>
 						</div>
 
 						<div class="form-group">
-							<label for="photo_1">Upload at least 1 photo</label><br />
+							<label for="photo_1"> Upload a Photo
+							<h6><small>(minimum 1 photo required)</small></h6> </label>
 						</div>
 
 						<div class="form-group">

@@ -19,18 +19,19 @@
                         {% csrf_token %}
                         {% for field in register_form %}
                         <p>
-                            <span style="color: #fff">{{ field.label_tag }}</span><br>
+                            <span style="color: black">{{ field.label_tag }}</span><br>
                             {{ field }}
-                            {% if field.help_text %}
+                            <!--{% if field.help_text %}
                             <small style="color: #FEDC3D">{{ field.help_text }}</small>
-                            {% endif %}
+                            {% endif %}-->
                             {% for error in field.errors %}
-                            <p style="color: red">{{ error }}</p>
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}</div>
                             {% endfor %}
                         </p>
                         {% endfor %}
                         <div class="form-group">
-                            <button type="submit" class="btn float-right login_btn">Sign up</button>
+                            <button type="submit" class="btn float-left login_btn btn-secondary">Sign up</button>
                         </div>
                     </form>
                     <!-- <form action="{% url 'register' %}" method="POST">
@@ -79,7 +80,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="d-flex justify-content-center links">
-                        Already have an account? <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
+                        Already have an account? <a href="{% url 'login' %}" class="btn btn-link">Log In</a>
                     </div>
                 </div>
             </div>
