@@ -146,6 +146,13 @@ a, a:focus, a:hover {
   background-color: #f9f9ff;
 }
 
+.desc{
+  white-space: nowrap; 
+  width: 250px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
 /* NAVBAR */
 
 .navbar{
@@ -652,4 +659,20 @@ font-size:9px;
   text-transform: uppercase;
   color: #a5a5a5;
   letter-spacing: 1px;
+}
+
+/*TERMS*/
+.terms{
+  padding: 25px 100px 25px 100px;
+}
+
+/**EDIT**/
+.updatingimg{
+  padding:0px;
+  font-size:10px;
+}
+
+[name~=description]{
+  width: 100%;
+  height:120px;
 }

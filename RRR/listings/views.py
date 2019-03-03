@@ -184,28 +184,33 @@ def create(request):
 def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
         
-    if request.method == "POST":
-        form = ListingForm(request.POST, instance=specific_listing)
-        
+    if request.method == "GET":
+        context = {
+            'title': specific_listing.title,
+            'location': specific_listing.location,
+            'description': specific_listing.description,
+            'daily_price': specific_listing.daily_price,
+            'photo_1': specific_listing.photo_1,
+            'photo_2': specific_listing.photo_2,
+            'photo_3': specific_listing.photo_3,
+            'photo_4': specific_listing.photo_4,
+            'photo_5': specific_listing.photo_5,
+        } 
+        return render(request, 'listings/edit.html', context)
+
+    else:
+        form = ListingForm(request.POST, request.FILES, instance=specific_listing)
+    
         try:
             if form.is_valid():
                 form.save()
-                message = ConcreteCreator(request, "success", 'Your post has been updated!').create()
+                message = ConcreteCreator(request, 0, 'Your post has been updated!').create()
                 message.display()
         except Exception as e:
-            message = ConcreteCreator(request, "error", 'Your post was not saved due to an error. Please try again!').create()
+            message = ConcreteCreator(request, 1, 'Your post was not saved due to an error. Please try again!').create()
             message.display()
-    else:
-        form = ListingForm(instance=specific_listing)
-        message = ConcreteCreator(request, "error", 'Not a form! Please try again').create()
-        message.display()
 
-    context = {
-        'form':form,
-        'title': specific_listing.title,
-    }
-
-    return render(request, 'listings/create.html', context)
+        return redirect('dashboard')
 
 def delete(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
