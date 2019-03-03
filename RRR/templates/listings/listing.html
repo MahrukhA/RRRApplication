@@ -89,8 +89,8 @@
 								{% endif %}
 							</span>
 							{% if is_approved == False %}
-						<p class="alert alert-warning">This listing has not yet been approved by an admin!</p>
-						{% endif %}
+							<p class="alert alert-warning">This listing has not yet been approved by an admin!</p>
+							{% endif %}
 						</p>
 						{% if request.user.is_authenticated %}
 						{% if not request.user == user %}
