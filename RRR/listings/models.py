@@ -32,14 +32,12 @@ class Creator:
         pass
 
 class ConcreteCreator(Creator):
-    class Meta:
-        proxy = True
 
     def create(self):
         """Creates an object based on the context of what just happened"""
-        if (self.context == 0): #Success
+        if (self.context == "success"): #Success
             return ConcreteSuccessMessage(self.request, self.context, self.message)
-        elif (self.context == 1): #Error
+        elif (self.context == "error"): #Error
             return ConcreteErrorMessage(self.request, self.context, self.message)
         else: #Warning
             return ConcreteWarningMessage(self.request, self.context, self.message)
@@ -54,9 +52,6 @@ class Message:
 
 class ConcreteSuccessMessage(Creator, Message):
     """Success message"""
-    class Meta:
-        proxy = True
-
 
     def display(self):
         messages.success(self.request, self.message)
@@ -64,8 +59,6 @@ class ConcreteSuccessMessage(Creator, Message):
 
 class ConcreteErrorMessage(Creator, Message):
     """Error message"""
-    class Meta:
-        proxy = True
 
     def display(self):
         messages.error(self.request, self.message)
@@ -73,8 +66,6 @@ class ConcreteErrorMessage(Creator, Message):
 
 class ConcreteWarningMessage(Creator, Message):
     """Warning message"""
-    class Meta:
-        proxy = True
 
     def display(self):
         messages.warning(self.request, self.message)
