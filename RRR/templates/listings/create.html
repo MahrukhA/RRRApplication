@@ -13,21 +13,21 @@
 				</div>
 				<div class="card-body create-body">
 					{% include 'partials/_alerts.html' %}
-					<form method="POST">
+					<form method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="title">Title</label>
-							<input type="text" name="title" class="form-control" required>
+							<input type="text" name="title" class="form-control" value="{{ title }}" required>
 						</div>
 
 						<div class="form-group">
 							<label for="description">Description</label>
-							<textarea name="description" class="form-control" rows="4" cols="15" required></textarea>
+							<textarea name="description" class="form-control" rows="4" cols="15" required>{{ description }}</textarea>
 						</div>
 
 						<div class="form-group">
 							<label for="daily_price">Daily Price</label>
-							<input type="number" name="daily_price" class="form-control" required>
+							<input type="number" name="daily_price" class="form-control" value="{{ daily_price }}"required>
 						</div>
 
 						<div class="form-group">
@@ -45,7 +45,7 @@
 						</div>
 
 						<div class="form-group">
-							<span><input id="photo_1" type="file" name="photo_1" required></span><!--Span changes font to yellow to make it easier to read-->
+							<span><input id="photo_1" type="file" name="photo_1" value="{{ photo_1.url }}"required></span><!--Span changes font to yellow to make it easier to read-->
 						</div>
 
 						<div class="form-group">

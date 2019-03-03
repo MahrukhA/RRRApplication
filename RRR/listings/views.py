@@ -194,24 +194,31 @@ def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
         
     if request.method == 'POST':
-        form = ListingForm(request.POST, instance=specific_listing)
+        form = ListingForm(request.POST, request.FILES, instance=specific_listing)
         
         try:
             if form.is_valid():
                 form.save()
                 message = ConcreteCreator(request, "success", 'Your post has been updated!').create()
                 message.display()
+                return redirect('dashboard')
         except Exception as e:
             message = ConcreteCreator(request, "error", 'Your post was not saved due to an error. Please try again!').create()
             message.display()
     else:
         form = ListingForm(instance=specific_listing)
-        message = ConcreteCreator(request, "error", 'Not a form! Please try again').create()
-        message.display()
 
     context = {
         'form':form,
         'title': specific_listing.title,
+        'description': specific_listing.description,
+        'daily_price': specific_listing.daily_price,
+        'location': specific_listing.location,
+        'photo_1': specific_listing.photo_1,
+        'photo_2': specific_listing.photo_2,
+        'photo_3': specific_listing.photo_3,
+        'photo_4': specific_listing.photo_4,
+        'photo_5': specific_listing.photo_5,
     }
 
     return render(request, 'listings/create.html', context)
