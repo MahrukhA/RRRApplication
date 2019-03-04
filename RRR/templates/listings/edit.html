@@ -14,7 +14,7 @@
 				</div>
 				<div class="card-body create-body">
 					{% include 'partials/_alerts.html' %}
-					<form method="GET" enctype="multipart/form-data">
+					<form method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="title">Title</label>
@@ -59,14 +59,13 @@
                             <input type="radio" name="location" value="3"><span> West Regina</span><br />
                             {% endif %}
 
-						</div>
+                        </div>
 						<div class="form-group">
-							<label for="photo_1"> Upload a Photo
-							<h6><small>(minimum 1 photo required)</small></h6> </label>
-						</div>
+							<label for="photo_1"> Upload a photo </label>
+                        </div>
 
 						<div class="form-group">
-                            <span><input id="photo_1" type="file" name="photo_1" required></span>
+                            <span>{{ form.photo_1 }}</span>
                             {% if photo_1 %}
                             <div class = "updatingimg"> Current Image </div>
                             <p><img src="{{ photo_1.url }}" class="smallthumbs"></p>
@@ -99,7 +98,7 @@
                             {% if photo_5 %}
                             <p><img src="{{ photo_5.url }}" class="smallthumbs"></p>
                             {% endif %}
-						</div>
+						</div> -->
 
 						<input type="submit" value="Submit" class="btn btn-secondary btn-block" />
 					</form>

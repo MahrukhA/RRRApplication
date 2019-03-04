@@ -184,21 +184,7 @@ def create(request):
 def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
         
-    if request.method == "GET":
-        context = {
-            'title': specific_listing.title,
-            'location': specific_listing.location,
-            'description': specific_listing.description,
-            'daily_price': specific_listing.daily_price,
-            'photo_1': specific_listing.photo_1,
-            'photo_2': specific_listing.photo_2,
-            'photo_3': specific_listing.photo_3,
-            'photo_4': specific_listing.photo_4,
-            'photo_5': specific_listing.photo_5,
-        } 
-        return render(request, 'listings/edit.html', context)
-
-    else:
+    if request.method == "POST":
         form = ListingForm(request.POST, request.FILES, instance=specific_listing)
     
         try:
@@ -211,6 +197,22 @@ def edit(request, listing_id):
             message.display()
 
         return redirect('dashboard')
+
+    form = ListingForm()
+    context = {
+        'form' : form,
+        'title': specific_listing.title,
+        'location': specific_listing.location,
+        'description': specific_listing.description,
+        'daily_price': specific_listing.daily_price,
+        'photo_1': specific_listing.photo_1,
+        'photo_2': specific_listing.photo_2,
+        'photo_3': specific_listing.photo_3,
+        'photo_4': specific_listing.photo_4,
+        'photo_5': specific_listing.photo_5
+    } 
+
+    return render(request, 'listings/edit.html', context)
 
 def delete(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)

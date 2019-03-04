@@ -2,6 +2,8 @@ from django import forms
 from .models import Listing
 
 class ListingForm(forms.ModelForm):
+	photo_1 = forms.FileField(required=False)
+
 	class Meta:
 		model = Listing
 		fields = [
