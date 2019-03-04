@@ -73,7 +73,16 @@ def listing(request, listing_id):
         'is_available': specific_listing.is_available,
         'user': specific_listing.user,
         'id': listing_id,
+        'is_approved': specific_listing.is_approved,
     }
+
+    
+    #Users can't view other user's non-approved listings (However they can view their own non-approved listings)
+    if specific_listing.is_approved is False and (str(request.user.username) != str(context['user'])): 
+        message = ConcreteCreator(request, "error", "You can't view other users listings which have not yet been approved by the admin!").create()
+        message.display()
+        return redirect('listings')
+
 
     # the message entered by the user to send to the listing owner
     email_msg = request.POST.get('email_msg', 0)
@@ -192,6 +201,7 @@ def edit(request, listing_id):
                 form.save()
                 message = ConcreteCreator(request, 0, 'Your post has been updated!').create()
                 message.display()
+                return redirect('dashboard')
         except Exception as e:
             message = ConcreteCreator(request, 1, 'Your post was not saved due to an error. Please try again!').create()
             message.display()

@@ -12,7 +12,7 @@
 					<h3 class="text-center"> CREATE A LISTING </h3>
 				</div>
 				<div class="card-body create-body">
-					{% include 'partials/_alerts.html' %}
+					{% include 'partials/_alerts.html' %} 
 					<form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="form-group">
@@ -41,12 +41,24 @@
 
 						<div class="form-group">
 							<label for="photo_1"> Upload a Photo
-							<h6><small>(minimum 1 photo required)</small></h6> </label>
+							{% if photo_1 %}
+							<h6><small>Photos are not required when editing a listing</small></h6>
+							{% else %}
+							<h6><small>(minimum 1 photo required)</small></h6>
+							{% endif %}
+							</label>
+
 						</div>
 
+						{% if photo_1 %}
+						<div class="form-group">
+							<span><input id="photo_1" type="file" name="photo_1"></span><!--Span changes font to yellow to make it easier to read-->
+						</div>
+						{% else %}
 						<div class="form-group">
 							<span><input id="photo_1" type="file" name="photo_1" required></span><!--Span changes font to yellow to make it easier to read-->
 						</div>
+						{% endif %}
 
 						<div class="form-group">
 							<span><input type="file" name="photo_2"></span>

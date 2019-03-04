@@ -58,7 +58,6 @@
 							<img src="{{ photo_5.url }}" class="smallthumbs">
 							{% endif %}
 						</div>
-
 					</div>
 					<!-- Details -->
 					<div class="detail">
@@ -89,6 +88,9 @@
 								<span>Not available</span>
 								{% endif %}
 							</span>
+							{% if is_approved == False %}
+							<p class="alert alert-warning">This listing has not yet been approved by an admin!</p>
+							{% endif %}
 						</p>
 						{% if request.user.is_authenticated %}
 						{% if not request.user == user %}
