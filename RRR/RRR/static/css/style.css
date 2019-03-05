@@ -436,9 +436,9 @@ width: 100px;
 }
 
 .alert{
-font-size:10px;
-padding-top:0px;
-padding-bottom:0px;
+font-size:16px;
+padding-top:3px;
+padding-bottom:3px;
 width:100%;
 margin-left: auto;
 margin-right: auto;
