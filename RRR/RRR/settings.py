@@ -157,3 +157,9 @@ MESSAGE_TAGS = {
 # Login Redirect
 LOGIN_REDIRECT_URL = '/accounts/dashboard'
 LOGOUT_REDIRECT_URL = '/'
+
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
