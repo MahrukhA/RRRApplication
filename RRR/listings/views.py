@@ -129,24 +129,18 @@ def listing(request, listing_id):
 def create(request):
     if request.method == 'POST':
 
-        # 5 and 15 ARE PLACEHOLDER VALUES for right now
-        # title is too short
-        if (len(request.POST['title']) < 5):
-            message = ConcreteCreator(request, "error", 'Title must be at least 5 characters long!').create()
-            message.display()
-            return redirect('create')
+        context = {
+            'title': request.POST['title'],
+            'description': request.POST['description'],
+            'daily_price': request.POST['daily_price'],
+            'location': int(request.POST['location']),
+        }
 
         # description is too short
         if (len(request.POST['description']) < 15):
             message = ConcreteCreator(request, "error", 'Description must be at least 15 characters long!').create()
             message.display()
-            return redirect('create')
-
-        # price is empty
-        if (len(str(request.POST['daily_price'])) < 1):
-            message = ConcreteCreator(request, "error", 'Price can\'t be blank!').create()
-            message.display()
-            return redirect('create')
+            return render(request, 'listings/create.html', context)
 
         # uploaded file must be a jpg
         # goes through all the photos (photo_1 to photo_5) and checks if they exist
@@ -157,7 +151,7 @@ def create(request):
             if (filepath is not ('' or False) and not (str(filepath).endswith('.jpg') or str(filepath).endswith('.JPG') or str(filepath).endswith('.JPEG') or str(filepath).endswith('.jpeg') or str(filepath).endswith('.png') or str(filepath).endswith('.PNG'))):
                 message = ConcreteCreator(request, "error", 'Uploaded files must be jpgs or pngs!').create()
                 message.display()
-                return redirect('create')
+                return render(request, 'listings/create.html', context)
 
         # Stores user entered information in a form automatically
         form = ListingForm(request.POST, request.FILES)
@@ -174,9 +168,9 @@ def create(request):
             return redirect('dashboard')
 
         else:  # error while trying to create a post - this should never happen
-            message = ConcreteCreator(request, "error", 'Error! Please try again').create()
+            message = ConcreteCreator(request, "error", 'Please try again').create()
             message.display()
-            return redirect('create')
+            return render(request, 'listings/create.html', context)
 
     else:
         # can only view the create a listing page if they are logged in
