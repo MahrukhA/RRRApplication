@@ -5,8 +5,8 @@ from listings.models import Listing, ConcreteCreator
 from django.core.paginator import Paginator
 from .forms import RegisterForm
 
-
-def register(request):
+#Register account
+def register(request): 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -18,7 +18,7 @@ def register(request):
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'register_form': form})
 
-
+#Displays user listings, allows user to mark listing as unavailable and available
 def dashboard(request):
     user_listings_query = Listing.objects.filter(user_id=request.user).order_by('id')
     paginator = Paginator(user_listings_query, 10)
@@ -41,7 +41,7 @@ def dashboard(request):
 
     return render(request, 'accounts/dashboard.html', {'user_listings_query': user_listings_query, 'user_listings': user_listings})
 
-
+#Edit profile, allows user to edit fields on profile page
 def profile(request):
     if request.user.is_authenticated is False:  # User must be logged in to view their Edit Profile page
         message = ConcreteCreator(request, "error", 'You must be logged in to view this page!').create()

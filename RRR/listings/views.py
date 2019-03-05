@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 
+# Allows for filtering in listings
 def listings(request):
     # search query (= None if q POST var isnt set)
     query = request.GET.get('q')
@@ -56,7 +57,7 @@ def listings(request):
     approved_listings = paginator.get_page(page)
     return render(request, 'listings/viewlistings.html', {'approved_listings': approved_listings, 'count': approved_listings_query.count, 'query': query})
 
-
+#Specific listing, allows for subscription
 def listing(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
     context = {
@@ -125,7 +126,7 @@ def listing(request, listing_id):
 
     return render(request, 'listings/listing.html', context)
 
-
+# Create a listing
 def create(request):
     if request.method == 'POST':
 
@@ -183,6 +184,7 @@ def create(request):
             # logged in user clicked on the Create a Listing button
             return render(request, 'listings/create.html')
 
+# Edit a listing 
 def edit(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
         
@@ -201,7 +203,7 @@ def edit(request, listing_id):
 
         return redirect('dashboard')
 
-    form = ListingForm()
+    form = ListingForm() # Make photo upload optional
     context = {
         'form' : form,
         'title': specific_listing.title,
@@ -217,6 +219,7 @@ def edit(request, listing_id):
 
     return render(request, 'listings/edit.html', context)
 
+# Delete a listing
 def delete(request, listing_id):
     specific_listing = Listing.objects.get(id=listing_id)
     
