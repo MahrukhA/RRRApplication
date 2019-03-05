@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 
-
+# FACTORY PATTERN
 class Creator:
     """
     Declares the factory method, and returns an object of type Message.
@@ -31,16 +31,18 @@ class Creator:
         """Creates a message object based on the type of message to display to the user"""
         pass
 
+
 class ConcreteCreator(Creator):
 
     def create(self):
         """Creates an object based on the context of what just happened"""
-        if (self.context == "success"): #Success
+        if (self.context == "success"):  # Success
             return ConcreteSuccessMessage(self.request, self.context, self.message)
-        elif (self.context == "error"): #Error
+        elif (self.context == "error"):  # Error
             return ConcreteErrorMessage(self.request, self.context, self.message)
-        else: #Warning
+        else:  # Warning
             return ConcreteWarningMessage(self.request, self.context, self.message)
+
 
 class Message:
     """Abstract class for all three message classes"""
@@ -49,6 +51,7 @@ class Message:
     @abstractmethod
     def display(self):
         pass
+
 
 class ConcreteSuccessMessage(Creator, Message):
     """Success message"""
@@ -71,8 +74,9 @@ class ConcreteWarningMessage(Creator, Message):
         messages.warning(self.request, self.message)
 
 
-
+# OBSERVER PATTERN
 class Subject:
+    """Provides an 'interface' for attaching and detaching Observer objects."""
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -92,6 +96,7 @@ class Subject:
 
 
 class Observer:
+    """Defines an updating 'interface' for objects that should be notified of changes in a subject."""
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -101,15 +106,22 @@ class Observer:
 
 
 class ConcreteObserver(User, Observer):
+    """
+    The default User model acts as the concrete observer, implements the Observer 'interface'. 
+    Creates a proxy to Django's default User model so it can access the same table in the database
+    """
     class Meta:
         proxy = True
 
     def update(self, subject):
-        print('Subscriber {0} was notified successfully about the availability of {1}'.format(self.username, subject))
+        print('Subscriber {0} was notified successfully about the availability of {1}'.format(
+            self.username, subject))
 
 
 class Listing(models.Model, Subject):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    """The custom Listing model acts as the concrete subject, implements the Subject 'interface'."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     location = models.IntegerField()
     description = models.TextField()
@@ -140,7 +152,7 @@ class Listing(models.Model, Subject):
             super(Listing, self).save()
         else:
             print('Already subscribed!')
-    
+
     def remove(self, observer):
         try:
             self.subscribers = ArrayRemove('subscribers', observer)
@@ -150,13 +162,13 @@ class Listing(models.Model, Subject):
 
     def notify(self):
         subject = '[RRR] ' + self.title + ' is now available!'
-        message = 'Hey! You were subscribed to ' + self.title + ' and we just wanted to let you know it\'s now available to be rented!'
+        message = 'Hey! You were subscribed to ' + self.title + \
+            ' and we just wanted to let you know it\'s now available to be rented!'
         from_email = settings.EMAIL_HOST_USER
         to_email = []
         for sub in self.subscribers:
             ConcreteObserver.objects.get(email=sub).update(self.title)
-            to_email.append(sub) #adds all subscribers to the emailing list
+            to_email.append(sub)  # adds all subscribers to the emailing list
 
-        send_mail(subject, message, from_email, to_email, fail_silently=True) #send the email to all subscribers
-
-
+        # send the email to all subscribers
+        send_mail(subject, message, from_email, to_email, fail_silently=True)
