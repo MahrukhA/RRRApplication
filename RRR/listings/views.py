@@ -3,7 +3,6 @@ from django.contrib import messages
 from .forms import ListingForm
 from .models import Listing,  ConcreteCreator
 from django.core.paginator import Paginator
-from sendgrid.helpers.mail import *
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User

@@ -5,6 +5,7 @@ settings.json
 __pycache__/
 local_settings.py
 media
+static
 migrations
 Pipfile
 Pipfile.lock
